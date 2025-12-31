@@ -113,6 +113,12 @@ Use Google Gemini 2.5 Flash Lite to generate natural language summaries:
 python scripts/python/generate_match_narrative.py 1485939
 ```
 
+Show the prompt used for generation:
+
+```bash
+python scripts/python/generate_match_narrative.py 1485939 --prompt
+```
+
 Outputs a 3-4 paragraph narrative covering match result, key performances, and pivotal moments.
 
 ### Test Gemini API
@@ -121,6 +127,43 @@ Verify Gemini connectivity and quota status:
 
 ```bash
 python scripts/python/test_gemini_connection.py
+```
+
+## Testing
+
+### Run Unit Tests
+
+Run all Python tests:
+```bash
+uv run pytest
+```
+
+Run specific test file:
+```bash
+uv run pytest tests/test_generate_match_narrative.py
+```
+
+Run with verbose output:
+```bash
+uv run pytest -v
+```
+
+Run with coverage report:
+```bash
+uv run pytest --cov=scripts/python --cov-report=html
+open htmlcov/index.html  # View coverage report
+```
+
+### dbt Tests
+
+Run dbt data quality tests:
+```bash
+dbt test
+```
+
+Run tests for specific models:
+```bash
+dbt test --select stg_cricket__deliveries
 ```
 
 ## Development Notes

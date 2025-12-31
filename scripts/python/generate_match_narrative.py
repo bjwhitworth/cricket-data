@@ -11,7 +11,7 @@ import google.genai as genai
 
 def _row_to_dict(cursor, row):
     """Convert a database row tuple to a dictionary using cursor column names."""
-    if not row:
+    if row is None:
         return None
     columns = [desc[0] for desc in cursor.description]
     return dict(zip(columns, row))
