@@ -1,5 +1,6 @@
 # Data
 data/raw/**/*
+data/scratch/
 
 # Compiled SQL and artifacts
 target/
