@@ -73,7 +73,7 @@ def test_connection():
         # For now, just inform the user
         print("\n  ℹ️  Real-time quota monitoring requires google-cloud-monitoring SDK")
         print("      Install with: pip install google-cloud-monitoring")
-    except:
+    except Exception:
         pass
     
     print("\n✅ All tests passed! Gemini API is ready to use.")
