@@ -82,13 +82,13 @@ select
   , if(outcome_struct.eliminator is not null, outcome_struct.eliminator, outcome_struct.winner)        as winner
   , case
     when outcome_struct.eliminator is not null
-      then 'super_over'
+      then 'tie_then_super_over(s)'
     when outcome_struct.by.innings is not null
-      then 'innings'
+      then 'by_innings'
     when outcome_struct.by.wickets is not null
-      then 'wickets'
+      then 'by_wickets'
     when outcome_struct.by.runs is not null
-      then 'runs'
+      then 'by_runs'
     when result_text_if_no_winner is not null
       then result_text_if_no_winner
     else 'N/A'

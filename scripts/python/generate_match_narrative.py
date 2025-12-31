@@ -134,7 +134,7 @@ Match Details:
 - Toss: {info['toss_winner']} won and chose to {info['toss_decision']}
 - Result: {info['result_type']}
 - Winner: {info['winner'] or info['winner_after_eliminator'] or 'Tie/No Result'}
-- Margin: {f"{info['result_description']} runs" if info['result_description'] else f"{info['outcome_method']} wickets" if info['outcome_method'] else "N/A"}
+- Margin: {f"{info['result_description']}" if info['result_description'] else "N/A"}
 - Player(s) of the Match: {info['players_of_match']}
 
 Innings Summaries:
