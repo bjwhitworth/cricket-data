@@ -23,7 +23,7 @@ def test_connection():
     print(f"  Key prefix: {api_key[:8]}...")
     
     try:
-        client = genai.Client(api_key=api_key)  # Not needed because client reads from env var GEMINI_API_KEY
+        client = genai.Client(api_key=api_key)  # Explicitly pass API key from GEMINI_API_KEY environment variable
         print("✓ API configured successfully")
     except Exception as e:
         print(f"❌ Failed to configure API: {e}")
