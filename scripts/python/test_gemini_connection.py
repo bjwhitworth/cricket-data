@@ -68,13 +68,10 @@ def test_connection():
     print("    or Google Cloud Console if using a paid project")
     
     # Try to get current usage (requires Google Cloud API)
-    try:
-        # Note: This requires additional setup with google-cloud-monitoring
-        # For now, just inform the user
-        print("\n  ℹ️  Real-time quota monitoring requires google-cloud-monitoring SDK")
-        print("      Install with: pip install google-cloud-monitoring")
-    except Exception:
-        pass
+    # Note: This requires additional setup with google-cloud-monitoring
+    # For now, just inform the user
+    print("\n  ℹ️  Real-time quota monitoring requires google-cloud-monitoring SDK")
+    print("      Install with: pip install google-cloud-monitoring")
     
     print("\n✅ All tests passed! Gemini API is ready to use.")
 
