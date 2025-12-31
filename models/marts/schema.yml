@@ -1,0 +1,101 @@
+version: 2
+
+models:
+  - name: fct_batter_innings
+    description: |
+      One row per batter per innings with aggregated batting statistics and match context.
+      Use this model to answer questions like "What were the last 5 Test innings by player X?"
+    columns:
+      - name: match_id
+        description: Unique match identifier
+        tests:
+          - not_null
+      - name: innings_number
+        description: Innings number (1-based)
+        tests:
+          - not_null
+      - name: batter
+        description: Player name
+        tests:
+          - not_null
+      - name: batting_team
+        description: Team the batter was playing for
+      - name: runs_scored
+        description: Total runs scored by the batter in this innings
+      - name: balls_faced
+        description: Total balls faced by the batter
+      - name: strike_rate
+        description: Runs per 100 balls
+      - name: fours
+        description: Number of boundary fours
+      - name: sixes
+        description: Number of boundary sixes
+      - name: was_out
+        description: 1 if the batter was dismissed, 0 if not out
+      - name: match_type
+        description: Format (Test, ODI, T20, etc.)
+      - name: match_start_date
+        description: Date the match started
+      - name: venue
+        description: Stadium/ground name
+      - name: season
+        description: Cricket season or year
+
+  - name: fct_bowler_innings
+    description: |
+      One row per bowler per innings with aggregated bowling statistics and match context.
+      Use this model to answer questions like "What were the best bowling figures in T20 matches?"
+    columns:
+      - name: match_id
+        description: Unique match identifier
+        tests:
+          - not_null
+      - name: innings_number
+        description: Innings number (1-based)
+        tests:
+          - not_null
+      - name: bowler
+        description: Bowler name
+        tests:
+          - not_null
+      - name: opposition_team
+        description: Team that was batting
+      - name: legal_deliveries
+        description: Number of legal deliveries bowled (excludes wides and noballs)
+      - name: overs_bowled
+        description: Overs bowled (legal_deliveries / 6)
+      - name: runs_conceded
+        description: Total runs conceded including extras
+      - name: wickets
+        description: Number of wickets taken (excludes run outs and other non-bowling dismissals)
+      - name: bowling_average
+        description: Runs per wicket
+      - name: economy_rate
+        description: Runs conceded per over
+      - name: bowling_strike_rate
+        description: Balls per wicket
+      - name: wides
+        description: Number of wide deliveries
+      - name: noballs
+        description: Number of no balls
+      - name: match_type
+        description: Format (Test, ODI, T20, etc.)
+      - name: match_start_date
+        description: Date the match started
+
+  - name: dim_players
+    description: |
+      Dimension table with one row per unique player across all matches.
+      Includes player name, teams played for, and whether they have batting/bowling records.
+    columns:
+      - name: player_name
+        description: Player name (unique identifier)
+        tests:
+          - not_null
+          - unique
+      - name: teams_played_for
+        description: Array of teams the player has represented
+      - name: has_batted
+        description: True if player has batting records in deliveries
+      - name: has_bowled
+        description: True if player has bowling records in deliveries

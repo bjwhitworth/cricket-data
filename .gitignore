@@ -1,0 +1,42 @@
+# Data
+data/raw/**/*
+
+# Compiled SQL and artifacts
+target/
+dbt_packages/
+logs/
+.Rproj.user
+
+# Local DB files
+*.duckdb
+*.duckdb.wal
+data/duckdb/
+
+# Python artifacts
+__pycache__/
+*.pyc
+venv/
+.venv/
+.env
+.python-version
+.ipynb_checkpoints/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+*.rds
+*.Rhistory
+*.RData
+*.Rproj
+*.Rprofile
+
+# MacOS files
+*.DS_Store
+Thumbs.db
+*.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+*.apdisk

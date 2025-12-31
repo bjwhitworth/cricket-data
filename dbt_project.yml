@@ -1,0 +1,32 @@
+name: 'cricket'
+version: '1.0.0'
+
+profile: 'cricket'
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+# Configuring models
+# Full documentation: https://docs.getdbt.com/docs/configuring-models
+
+models:
+  cricket:
+    example:
+      +enabled: false
+    intermediate:
+      +materialized: view
+      +tags: ['intermediate']
+    staging:
+      +materialized: view
+      +tags: ['stage']
+    marts:
+      +materialized: table
+      +tags: ['marts']

@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: int_cricket__innings_flattened
+    description: One row per innings with raw inning struct and context.
+    columns:
+      - name: match_id
+        tests:
+          - not_null
+      - name: innings_number
+        tests:
+          - not_null
+      - name: batting_team
+      - name: ingested_at
+
+  - name: int_cricket__overs_flattened
+    description: One row per over with ordinality preserved.
+    columns:
+      - name: match_id
+        tests:
+          - not_null
+      - name: innings_number
+        tests:
+          - not_null
+      - name: over_idx
+        tests:
+          - not_null
+      - name: batting_team
+      - name: ingested_at
+
+  - name: int_cricket__deliveries_flattened
+    description: One row per delivery with runs, extras, and wicket fields flattened.
+    columns:
+      - name: match_id
+        tests:
+          - not_null
+      - name: innings_number
+        tests:
+          - not_null
+      - name: over_number
+        tests:
+          - not_null
+      - name: delivery_idx
+        tests:
+          - not_null
+      - name: batter
+      - name: bowler
+      - name: runs_total
+      - name: is_wicket

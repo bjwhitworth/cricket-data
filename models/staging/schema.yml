@@ -1,0 +1,58 @@
+version: 2
+
+models:
+  - name: stg_cricket__raw_json
+    description: "Single-row-per-match ingestion of the JSON scorecards referenced via the glob returned by the cricket_raw_json_glob macro."
+    columns:
+      - name: match_id
+        description: "Identifier derived from each JSON filename."
+        tests:
+          - not_null
+          - unique
+      - name: source_file_path
+        description: "Absolute path of the JSON file consumed by DuckDB."
+        tests:
+          - not_null
+      - name: ingested_at
+        description: "Timestamp recorded when dbt parsed the JSON payload."
+  - name: stg_cricket__matches
+    description: "Match-level attributes (season, venue, toss, results) flattened from the raw JSON payload."
+    columns:
+      - name: match_id
+        tests:
+          - not_null
+          - unique
+      - name: match_start_date
+        tests:
+          - not_null
+      - name: winner
+        description: "Winning team, if the JSON outcome provides one."
+  - name: stg_cricket__innings
+    description: "One row per innings with aggregate scoring totals and wickets per match."
+    columns:
+      - name: match_id
+        tests:
+          - not_null
+      - name: innings_number
+        tests:
+          - not_null
+      - name: batting_team
+        tests:
+          - not_null
+  - name: stg_cricket__deliveries
+    description: "Ball-by-ball feed with batters, bowlers, runs, extras, and (first) wicket metadata."
+    columns:
+      - name: match_id
+        tests:
+          - not_null
+      - name: innings_number
+        tests:
+          - not_null
+      - name: over_number
+        tests:
+          - not_null
+      - name: ball_in_over
+        tests:
+          - not_null
+      - name: batter
+        description: "Striker recorded for the delivery."
