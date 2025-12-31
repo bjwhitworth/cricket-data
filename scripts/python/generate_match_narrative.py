@@ -10,103 +10,101 @@ import google.genai as genai
 
 def fetch_match_data(match_id: str) -> dict:
     """Query DuckDB for match summary data."""
-    conn = duckdb.connect('data/duckdb/dev.duckdb', read_only=True)
-    
-    # Match metadata
-    match_info = conn.execute("""
-        SELECT 
-            match_id,
-            event_name,
-            city,
-            venue,
-            match_start_date,
-            team_1,
-            team_2,
-            toss_winner,
-            toss_decision,
-            winner,
-            result_type,
-            result_description,
-            winner_after_eliminator,
-            outcome_method,
-            players_of_match
-        FROM stg_cricket__matches
-        WHERE match_id = ?
-    """, [match_id]).fetchone()
-    
-    if not match_info:
-        raise ValueError(f"Match {match_id} not found")
-    
-    # Innings summaries
-    innings = conn.execute("""
-        SELECT 
-            innings_number,
-            batting_team,
-            is_super_over,
-            runs_total,
-            wickets_fallen,
-            recorded_over_count
-        FROM stg_cricket__innings
-        WHERE match_id = ?
-        ORDER BY innings_number
-    """, [match_id]).fetchall()
-    
-    # Top batters per innings
-    top_batters = conn.execute("""
-        SELECT 
-            innings_number,
-            batter,
-            sum(runs_batter) as runs,
-            count(*) as balls_faced,
-            count_if(runs_batter = 4) as fours,
-            count_if(runs_batter = 6) as sixes
-        FROM stg_cricket__deliveries
-        WHERE match_id = ?
-        GROUP BY innings_number, batter
-        HAVING runs >= 20
-        ORDER BY innings_number, runs DESC
-    """, [match_id]).fetchall()
-    
-    # Top bowlers per innings
-    top_bowlers = conn.execute("""
-        SELECT 
-            innings_number,
-            bowler,
-            count(*) as balls_bowled,
-            sum(runs_total) as runs_conceded,
-            count_if(is_wicket) as wickets
-        FROM stg_cricket__deliveries
-        WHERE match_id = ?
-        GROUP BY innings_number, bowler
-        HAVING wickets > 0
-        ORDER BY innings_number, wickets DESC, runs_conceded ASC
-    """, [match_id]).fetchall()
-    
-    # Key wickets
-    key_wickets = conn.execute("""
-        SELECT 
-            innings_number,
-            over_number,
-            ball_in_over,
-            wicket_player_out,
-            wicket_kind,
-            bowler,
-            wicket_fielder_1,
-            wicket_fielder_2
-        FROM stg_cricket__deliveries
-        WHERE match_id = ? AND is_wicket = true
-        ORDER BY innings_number, over_number, ball_in_over
-    """, [match_id]).fetchall()
-    
-    conn.close()
-    
-    return {
-        'match_info': match_info,
-        'innings': innings,
-        'top_batters': top_batters,
-        'top_bowlers': top_bowlers,
-        'key_wickets': key_wickets
-    }
+    with duckdb.connect('data/duckdb/dev.duckdb', read_only=True) as conn:
+        
+        # Match metadata
+        match_info = conn.execute("""
+            SELECT 
+                match_id,
+                event_name,
+                city,
+                venue,
+                match_start_date,
+                team_1,
+                team_2,
+                toss_winner,
+                toss_decision,
+                winner,
+                result_type,
+                result_description,
+                winner_after_eliminator,
+                outcome_method,
+                players_of_match
+            FROM stg_cricket__matches
+            WHERE match_id = ?
+        """, [match_id]).fetchone()
+        
+        if not match_info:
+            raise ValueError(f"Match {match_id} not found")
+        
+        # Innings summaries
+        innings = conn.execute("""
+            SELECT 
+                innings_number,
+                batting_team,
+                is_super_over,
+                runs_total,
+                wickets_fallen,
+                recorded_over_count
+            FROM stg_cricket__innings
+            WHERE match_id = ?
+            ORDER BY innings_number
+        """, [match_id]).fetchall()
+        
+        # Top batters per innings
+        top_batters = conn.execute("""
+            SELECT 
+                innings_number,
+                batter,
+                sum(runs_batter) as runs,
+                count(*) as balls_faced,
+                count_if(runs_batter = 4) as fours,
+                count_if(runs_batter = 6) as sixes
+            FROM stg_cricket__deliveries
+            WHERE match_id = ?
+            GROUP BY innings_number, batter
+            HAVING runs >= 20
+            ORDER BY innings_number, runs DESC
+        """, [match_id]).fetchall()
+        
+        # Top bowlers per innings
+        top_bowlers = conn.execute("""
+            SELECT 
+                innings_number,
+                bowler,
+                count(*) as balls_bowled,
+                sum(runs_total) as runs_conceded,
+                count_if(is_wicket) as wickets
+            FROM stg_cricket__deliveries
+            WHERE match_id = ?
+            GROUP BY innings_number, bowler
+            HAVING wickets > 0
+            ORDER BY innings_number, wickets DESC, runs_conceded ASC
+        """, [match_id]).fetchall()
+        
+        # Key wickets
+        key_wickets = conn.execute("""
+            SELECT 
+                innings_number,
+                over_number,
+                ball_in_over,
+                wicket_player_out,
+                wicket_kind,
+                bowler,
+                wicket_fielder_1,
+                wicket_fielder_2
+            FROM stg_cricket__deliveries
+            WHERE match_id = ? AND is_wicket = true
+            ORDER BY innings_number, over_number, ball_in_over
+        """, [match_id]).fetchall()
+        
+        return {
+            'match_info': match_info,
+            'innings': innings,
+            'top_batters': top_batters,
+            'top_bowlers': top_bowlers,
+            'key_wickets': key_wickets
+        }
 
 def format_match_prompt(data: dict) -> str:
     """Format match data into an LLM prompt."""
