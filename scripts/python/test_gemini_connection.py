@@ -20,7 +20,6 @@ def test_connection():
         sys.exit(1)
     
     print("✓ API key found")
-    print(f"  Key prefix: {api_key[:8]}...")
     
     try:
         client = genai.Client(api_key=api_key)  # Explicitly pass API key from GEMINI_API_KEY environment variable
