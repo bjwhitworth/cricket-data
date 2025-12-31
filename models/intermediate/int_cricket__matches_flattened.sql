@@ -25,6 +25,16 @@ with base as (
   from {{ ref('stg_cricket__raw_json') }}
 )
 
+, super_over_rounds as (
+  select
+    match_id
+    , count(*)                                  as super_over_innings
+    , try_cast(ceil(count(*) / 2.0) as integer) as super_over_rounds
+  from {{ ref('int_cricket__innings_flattened') }}
+  where is_super_over = true
+  group by match_id
+)
+
 select
   base.match_id
   , base.source_file_path
@@ -67,19 +77,30 @@ select
   , info.registry.people
     as player_registry
   , base.ingested_at
+  , coalesce(sor.super_over_rounds, 0)
+    as super_over_rounds
   , if(outcome_struct.eliminator is not null, outcome_struct.eliminator, outcome_struct.winner)        as winner
   , case
+    when outcome_struct.eliminator is not null
+      then 'tie_then_super_over(s)'
     when outcome_struct.by.innings is not null
-      then 'innings'
+      then 'by_innings'
     when outcome_struct.by.wickets is not null
-      then 'wickets'
+      then 'by_wickets'
     when outcome_struct.by.runs is not null
-      then 'runs'
+      then 'by_runs'
     when result_text_if_no_winner is not null
       then result_text_if_no_winner
     else 'N/A'
   end                                                                                                  as result_type
   , case
+    when outcome_struct.eliminator is not null
+      then 'Super over' || case
+        when coalesce(sor.super_over_rounds, 0) > 0
+          then
+            ' (' || sor.super_over_rounds || ' round' || case when sor.super_over_rounds = 1 then '' else 's' end || ')'
+        else ''
+      end
     when outcome_struct.by.innings is not null
       then 'innings' || ' and ' || outcome_struct.by.runs || ' runs'
     when outcome_struct.by.wickets is not null
@@ -107,6 +128,8 @@ select
   , try_cast(event_struct.match_number as integer)
     as event_match_number
 from base
+left join super_over_rounds as sor
+  on base.match_id = sor.match_id
 
 -- TODO: Remove `.json` from match id
 -- TODO: Add match length in days
