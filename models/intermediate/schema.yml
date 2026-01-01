@@ -1,6 +1,26 @@
 version: 2
 
 models:
+  - name: int_cricket__matches_flattened
+    description: "Match-level data with flattened event, officials, outcome structs, and super over calculations."
+    columns:
+      - name: match_id
+        tests:
+          - not_null
+          - unique
+      - name: winner
+        description: "Winning team after eliminator/super over or regulation time."
+      - name: result_type
+        description: "Type of result: 'super_over', 'innings', 'wickets', 'runs', or tie/no result."
+      - name: result_description
+        description: "Human-readable result including margin and super over round count."
+      - name: super_over_rounds
+        description: "Number of super over rounds played. 0 if no super overs."
+      - name: winner_after_regulation_time
+        description: "Winner from regulation play (before eliminators)."
+      - name: winner_after_eliminator
+        description: "Winner after super over or bowl out eliminator."
+      
   - name: int_cricket__innings_flattened
     description: One row per innings with raw inning struct and context.
     columns:
@@ -12,6 +32,8 @@ models:
           - not_null
       - name: batting_team
       - name: ingested_at
+      - name: is_super_over
+        description: "Flag indicating if this innings is a super over."
 
   - name: int_cricket__overs_flattened
     description: One row per over with ordinality preserved.

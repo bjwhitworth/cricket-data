@@ -27,6 +27,12 @@ models:
           - not_null
       - name: winner
         description: "Winning team, if the JSON outcome provides one."
+      - name: result_type
+        description: "Type of result: 'super_over', 'innings', 'wickets', 'runs', or result text if no winner."
+      - name: result_description
+        description: "Human-readable description of the result including margin or super over rounds."
+      - name: super_over_rounds
+        description: "Number of super over rounds played (0 if none). Calculated as ceil(super over innings / 2)."
   - name: stg_cricket__innings
     description: "One row per innings with aggregate scoring totals and wickets per match."
     columns:
@@ -39,6 +45,8 @@ models:
       - name: batting_team
         tests:
           - not_null
+      - name: is_super_over
+        description: "Flag indicating if this innings is a super over."
   - name: stg_cricket__deliveries
     description: "Ball-by-ball feed with batters, bowlers, runs, extras, and (first) wicket metadata."
     columns:
