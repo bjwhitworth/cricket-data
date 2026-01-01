@@ -10,6 +10,3 @@ con <- dbConnect(duckdb::duckdb(),
 
 # install json extension
 dbExecute(con, "INSTALL json")
-
-# disconnect database
-dbDisconnect(con, shutdown = TRUE)

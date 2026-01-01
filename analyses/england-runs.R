@@ -1,5 +1,8 @@
 # Simple analysis of England's test runs totals in this dataset
 
+# DB Connection
+source('scripts/r/connect.R')
+
 # Libraries
 library(dplyr)
 library(ggplot2)
@@ -44,3 +47,6 @@ results <-
              LIMIT 10")
 
 print(results)
+
+# DB Disconnection
+source('scripts/r/disconnect.R')
