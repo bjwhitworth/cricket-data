@@ -42,7 +42,7 @@ with deliveries as (
     , i.recorded_over_count
     , i.is_super_over
   from {{ ref('stg_cricket__innings') }} as i
-  group by 1, 2
+  group by 1, 2, 3, 4, 5, 6
 )
 
 , bowler_innings_stats as (
