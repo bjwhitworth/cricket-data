@@ -24,12 +24,25 @@ with deliveries as (
     , venue
     , city
     , event_name
+    , event_match_number
     , toss_winner
     , winner
     , participating_teams
     , team_1
     , team_2
   from {{ ref('int_cricket__matches_flattened') }}
+)
+
+, match_innings_stats as (
+  select
+    i.match_id
+    , i.innings_number
+    , i.runs_total
+    , i.wickets_fallen
+    , i.recorded_over_count
+    , i.is_super_over
+  from {{ ref('stg_cricket__innings') }} as i
+  group by 1, 2
 )
 
 , bowler_innings_stats as (
@@ -66,9 +79,7 @@ with deliveries as (
 select
   bi.match_id
   , bi.innings_number
-  , dense_rank() over (partition by bi.match_id, bi.batting_team order by bi.innings_number) as bowling_innings_rank
   , bi.bowler
-  , if(bi.batting_team = m.team_1, m.team_2, m.team_1) as bowling_team
   , bi.batting_team
   , bi.legal_deliveries
   , bi.runs_conceded
@@ -83,15 +94,27 @@ select
   , m.venue
   , m.city
   , m.event_name
+  , m.event_match_number
   , m.toss_winner
   , m.winner
   , m.participating_teams
-  , round(bi.legal_deliveries / 6.0, 2)                               as overs_bowled
-  , round(bi.runs_conceded * 1.0 / nullif(bi.wickets, 0), 2)          as bowling_average
-  , round(bi.runs_conceded * 6.0 / nullif(bi.legal_deliveries, 0), 2) as economy_rate
-  , round(bi.legal_deliveries * 1.0 / nullif(bi.wickets, 0), 2)       as bowling_strike_rate
+  , i.runs_total                                                                             as innings_runs_total
+  , i.wickets_fallen                                                                         as innings_wickets_fallen
+  , i.recorded_over_count
+    as innings_recorded_over_count
+  , i.is_super_over                                                                          as innings_is_super_over
+  , dense_rank() over (partition by bi.match_id, bi.batting_team order by bi.innings_number) as bowling_innings_rank
+  , if(bi.batting_team = m.team_1, m.team_2, m.team_1)                                       as bowling_team
+  , round(bi.legal_deliveries / 6.0, 2)                                                      as overs_bowled
+  , round(bi.runs_conceded * 1.0 / nullif(bi.wickets, 0), 2)                                 as bowling_average
+  , round(bi.runs_conceded * 6.0 / nullif(bi.legal_deliveries, 0), 2)                        as economy_rate
+  , round(bi.legal_deliveries * 1.0 / nullif(bi.wickets, 0), 2)                              as bowling_strike_rate
 from bowler_innings_stats as bi
 left join matches as m
   on bi.match_id = m.match_id
+left join match_innings_stats as i
+  on
+    bi.match_id = i.match_id
+    and bi.innings_number = i.innings_number
 
 -- TODO: add innings statistics like total runs, wickets, overs etc
