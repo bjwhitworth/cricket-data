@@ -66,6 +66,7 @@ with deliveries as (
 select
   bi.match_id
   , bi.innings_number
+  , dense_rank() over (partition by bi.match_id, bi.batting_team order by bi.innings_number) as bowling_innings_rank
   , bi.bowler
   , if(bi.batting_team = m.team_1, m.team_2, m.team_1) as bowling_team
   , bi.batting_team

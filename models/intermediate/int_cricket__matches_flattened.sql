@@ -41,7 +41,7 @@ select
   , base.meta_json
   , base.info_json
   , meta.data_version
-  , info.season::varchar                                                                               as season
+  , replace(info.season::varchar, '"', '')                                                             as season
   , info.match_type
   , info.team_type
   , info.gender
@@ -125,11 +125,8 @@ select
   , try_cast(info.overs as integer)
     as scheduled_overs
   , try_cast(info.balls_per_over as integer)                                                           as balls_per_over
-  , try_cast(event_struct.match_number as integer)
-    as event_match_number
 from base
 left join super_over_rounds as sor
   on base.match_id = sor.match_id
 
--- TODO: Remove `.json` from match id
 -- TODO: Add match length in days
