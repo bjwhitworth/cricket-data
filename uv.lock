@@ -223,6 +223,7 @@ dependencies = [
     { name = "google-genai" },
     { name = "pytest" },
     { name = "pytest-cov" },
+    { name = "requests" },
     { name = "sqlfluff" },
     { name = "sqlfluff-templater-dbt" },
 ]
@@ -234,6 +235,7 @@ requires-dist = [
     { name = "google-genai", specifier = ">=1.56.0" },
     { name = "pytest", specifier = ">=8.0.0" },
     { name = "pytest-cov", specifier = ">=6.0.0" },
+    { name = "requests", specifier = ">=2.31.0" },
     { name = "sqlfluff", specifier = ">=3.5.0" },
     { name = "sqlfluff-templater-dbt", specifier = ">=3.5.0" },
 ]

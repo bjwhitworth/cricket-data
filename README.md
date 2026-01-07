@@ -8,10 +8,10 @@ This project builds a DuckDB implementation of **[Cricsheet](https://cricsheet.o
 
 ## Data Source
 
-Data is sourced from **[Cricsheet](https://cricsheet.org)**, an open-source collection of cricket match data. The JSON match files are available at [https://cricsheet.org/matches/](https://cricsheet.org/matches/).
+Data is sourced from **[Cricsheet](https://cricsheet.org)**, an open-source collection of cricket match data. All JSON match files are available in a single download at [https://cricsheet.org/downloads/all_json.zip](https://cricsheet.org/downloads/all_json.zip).
 
 **Note**: The raw JSON data (`data/raw/all_json/`) and generated DuckDB databases (`data/duckdb/`) are **not committed to Git**. They are gitignored to avoid bloating the repository. To use this pipeline:
-1. Download match JSON files from [cricsheet.org/matches/](https://cricsheet.org/matches/)
+1. Download and extract match JSON files from [cricsheet.org/downloads/all_json.zip](https://cricsheet.org/downloads/all_json.zip), or use the `check_cricsheet_updates.py` script
 2. Place them in `data/raw/all_json/`
 3. Run `dbt run` to generate the DuckDB database and materialized views
 
@@ -104,6 +104,30 @@ dbt run --select tag:batting
 - **Nullable fields**: Optional fields (super_over, powerplays, eliminator, method, etc.) are coalesced to sensible defaults
 
 ## Utilities
+
+### Check for New Data
+
+Check Cricsheet for new match files by comparing the official `all_json.zip` against your local data:
+
+```bash
+python scripts/python/check_cricsheet_updates.py
+```
+
+The script downloads the zip file metadata (without saving the full archive), compares the contents against your local `data/raw/all_json/` directory, and reports what's new or removed.
+
+Download new files automatically:
+
+```bash
+python scripts/python/check_cricsheet_updates.py --download
+```
+
+Limit downloads (useful for testing or large updates):
+
+```bash
+python scripts/python/check_cricsheet_updates.py --download --limit 50
+```
+
+After downloading, run `dbt run` to process the new data.
 
 ### Generate Match Narratives
 
