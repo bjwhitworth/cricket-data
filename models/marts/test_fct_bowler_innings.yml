@@ -1,0 +1,138 @@
+unit_tests:
+  - name: test_fct_bowler_innings_groups_by_all_columns
+    description: |
+      Test that fct_bowler_innings correctly groups by all specified columns including 
+      recorded_over_count and is_super_over. This ensures that innings with different 
+      over counts or super over flags are treated as separate records.
+    model: fct_bowler_innings
+    given:
+      - input: ref('int_cricket__deliveries_flattened')
+        rows:
+          # Regular innings - 20 overs
+          - match_id: "test_match_1"
+            innings_number: 1
+            batting_team: "Team A"
+            bowler: "Bowler 1"
+            runs_batter: 4
+            runs_extras: 0
+            extras_noballs: 0
+            extras_wides: 0
+            is_wicket: false
+            wicket_kind: null
+          - match_id: "test_match_1"
+            innings_number: 1
+            batting_team: "Team A"
+            bowler: "Bowler 1"
+            runs_batter: 6
+            runs_extras: 0
+            extras_noballs: 0
+            extras_wides: 0
+            is_wicket: true
+            wicket_kind: "bowled"
+          # Regular innings - 19 overs (different recorded_over_count)
+          - match_id: "test_match_1"
+            innings_number: 2
+            batting_team: "Team B"
+            bowler: "Bowler 1"
+            runs_batter: 4
+            runs_extras: 0
+            extras_noballs: 0
+            extras_wides: 0
+            is_wicket: false
+            wicket_kind: null
+          # Super over
+          - match_id: "test_match_1"
+            innings_number: 3
+            batting_team: "Team A"
+            bowler: "Bowler 1"
+            runs_batter: 2
+            runs_extras: 0
+            extras_noballs: 0
+            extras_wides: 0
+            is_wicket: false
+            wicket_kind: null
+
+      - input: ref('int_cricket__matches_flattened')
+        rows:
+          - match_id: "test_match_1"
+            season: "2023"
+            match_type: "T20"
+            match_start_date: "2023-06-15"
+            venue: "Test Stadium"
+            city: "Test City"
+            event_name: "Test Series"
+            event_match_number: 1
+            toss_winner: "Team A"
+            winner: "Team B"
+            participating_teams: ["Team A", "Team B"]
+            team_1: "Team A"
+            team_2: "Team B"
+
+      - input: ref('stg_cricket__innings')
+        rows:
+          # Innings 1 - 20 overs, not super over
+          - match_id: "test_match_1"
+            innings_number: 1
+            runs_total: 180
+            wickets_fallen: 5
+            recorded_over_count: 20
+            is_super_over: false
+          # Innings 2 - 19 overs, not super over (different over count)
+          - match_id: "test_match_1"
+            innings_number: 2
+            runs_total: 175
+            wickets_fallen: 7
+            recorded_over_count: 19
+            is_super_over: false
+          # Innings 3 - 1 over, IS super over
+          - match_id: "test_match_1"
+            innings_number: 3
+            runs_total: 15
+            wickets_fallen: 0
+            recorded_over_count: 1
+            is_super_over: true
+
+    expect:
+      rows:
+        # Bowler 1 in innings 1 (20 overs, not super over)
+        - match_id: "test_match_1"
+          innings_number: 1
+          bowler: "Bowler 1"
+          batting_team: "Team A"
+          legal_deliveries: 2
+          runs_conceded: 10
+          wickets: 1
+          wides: 0
+          noballs: 0
+          fours_conceded: 1
+          sixes_conceded: 1
+          innings_recorded_over_count: 20
+          innings_is_super_over: false
+        # Bowler 1 in innings 2 (19 overs, not super over)
+        - match_id: "test_match_1"
+          innings_number: 2
+          bowler: "Bowler 1"
+          batting_team: "Team B"
+          legal_deliveries: 1
+          runs_conceded: 4
+          wickets: 0
+          wides: 0
+          noballs: 0
+          fours_conceded: 1
+          sixes_conceded: 0
+          innings_recorded_over_count: 19
+          innings_is_super_over: false
+        # Bowler 1 in innings 3 (1 over, IS super over)
+        - match_id: "test_match_1"
+          innings_number: 3
+          bowler: "Bowler 1"
+          batting_team: "Team A"
+          legal_deliveries: 1
+          runs_conceded: 2
+          wickets: 0
+          wides: 0
+          noballs: 0
+          fours_conceded: 0
+          sixes_conceded: 0
+          innings_recorded_over_count: 1
+          innings_is_super_over: true
