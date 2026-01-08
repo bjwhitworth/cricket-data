@@ -27,10 +27,7 @@ from check_cricsheet_updates import (
     extract_files,
     main,
     CRICSHEET_ZIP_URL,
-    LOCAL_DATA_DIR
 )
-
-
 class TestGetLocalFiles:
     """Tests for get_local_files() function."""
     
