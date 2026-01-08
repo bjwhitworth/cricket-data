@@ -46,26 +46,22 @@ def get_local_files(verbose=False):
 
 def get_cricsheet_files(verbose=False):
     """
-    Download and inspect Cricsheet zip file to get list of available files.
-    This function fetches the Cricsheet zip archive from a remote URL using the `requests`
-    library, which handles HTTP communication. The `requests.get()` call:
-    - Sends an HTTP GET request to CRICSHEET_ZIP_URL
-    - Waits up to 60 seconds for a response (timeout=60)
-    - Downloads the entire zip file content into memory
-    - Raises an exception if the HTTP status indicates an error (via raise_for_status())
-    After downloading, the function reads the zip file contents without extracting to disk,
-    filtering for JSON files while excluding macOS metadata files.
+    Download the Cricsheet all_json zip archive and return available JSON files.
+
+    Args:
+        verbose (bool): If True, print additional debug output.
+
     Returns:
-        tuple: A tuple containing:
-            - set: Set of JSON filenames found in the zip archive (excluding __MACOSX files)
-            - io.BytesIO: In-memory buffer containing the downloaded zip file data
+        tuple[set[str], io.BytesIO]: A tuple containing:
+            - A set of JSON filenames in the zip archive (excluding __MACOSX files).
+            - An in-memory buffer containing the downloaded zip file data.
+
     Raises:
-        SystemExit: If the download fails (network error, timeout, bad HTTP status) or
-                    if the downloaded file is not a valid zip archive
+        SystemExit: If the download fails or the zip file cannot be read.
+
     Side Effects:
-        - Prints progress messages to stdout
-        - Prints error messages to stderr
-        - Exits the program (sys.exit(1)) on failure
+        Prints progress and error messages, and may terminate the program with
+        sys.exit(1) on failure.
     """
     if verbose:
         print(f"   [DEBUG] Downloading from: {CRICSHEET_ZIP_URL}")
