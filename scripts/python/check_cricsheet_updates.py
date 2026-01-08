@@ -25,9 +25,11 @@ LOCAL_DATA_DIR = Path("data/raw/all_json")
 
 
 def get_local_files(verbose=False):
-    """Get list of JSON files already downloaded.
-       Create the local data directory if it doesn't exist.
-       Returns a set of filenames.
+    """
+    Get list of JSON files already downloaded.
+
+    Create the local data directory if it doesn't exist.
+    Returns a set of filenames.
     """
     if verbose:
         print(f"   [DEBUG] Checking local directory: {LOCAL_DATA_DIR.absolute()}")
