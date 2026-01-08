@@ -15,7 +15,7 @@ import sys
 import io
 import zipfile
 from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock, call
+from unittest.mock import Mock, patch
 import requests
 
 # Add scripts/python to path so we can import the module

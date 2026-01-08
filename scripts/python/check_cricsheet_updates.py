@@ -69,6 +69,7 @@ def get_cricsheet_files(verbose=False):
     """
     if verbose:
         print(f"   [DEBUG] Downloading from: {CRICSHEET_ZIP_URL}")
+
     print("   Downloading zip file metadata...", end=' ')
     
     try:
