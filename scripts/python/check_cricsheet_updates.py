@@ -25,7 +25,10 @@ LOCAL_DATA_DIR = Path("data/raw/all_json")
 
 
 def get_local_files():
-    """Get list of JSON files already downloaded."""
+    """Get list of JSON files already downloaded.
+       Create the local data directory if it doesn't exist.
+       Returns a set of filenames.
+    """
     if not LOCAL_DATA_DIR.exists():
         LOCAL_DATA_DIR.mkdir(parents=True, exist_ok=True)
         return set()
@@ -34,6 +37,28 @@ def get_local_files():
 
 
 def get_cricsheet_files():
+    """
+    Download and inspect Cricsheet zip file to get list of available files.
+    This function fetches the Cricsheet zip archive from a remote URL using the `requests`
+    library, which handles HTTP communication. The `requests.get()` call:
+    - Sends an HTTP GET request to CRICSHEET_ZIP_URL
+    - Waits up to 60 seconds for a response (timeout=60)
+    - Downloads the entire zip file content into memory
+    - Raises an exception if the HTTP status indicates an error (via raise_for_status())
+    After downloading, the function reads the zip file contents without extracting to disk,
+    filtering for JSON files while excluding macOS metadata files.
+    Returns:
+        tuple: A tuple containing:
+            - set: Set of JSON filenames found in the zip archive (excluding __MACOSX files)
+            - io.BytesIO: In-memory buffer containing the downloaded zip file data
+    Raises:
+        SystemExit: If the download fails (network error, timeout, bad HTTP status) or
+                    if the downloaded file is not a valid zip archive
+    Side Effects:
+        - Prints progress messages to stdout
+        - Prints error messages to stderr
+        - Exits the program (sys.exit(1)) on failure
+    """
     """Download and inspect Cricsheet zip file to get list of available files."""
     print("   Downloading zip file metadata...", end=' ')
     
@@ -141,7 +166,7 @@ def main():
     
     if not new_files and removed_files:
         print("⚠️  No new files, but some local files are no longer on Cricsheet.")
-        print("    This may indicate files were removed or the scraping failed.")
+        print("    This may indicate files were removed or the zip archive changed.")
         print()
     
     # Show sample of new files
