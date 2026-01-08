@@ -145,15 +145,16 @@ def main():
         print()
     
     # Show sample of new files
-    print(f"🆕 New files available ({len(new_files)} total):")
-    sample_size = min(10, len(new_files))
-    for filename in sorted(new_files)[:sample_size]:
-        print(f"   - {filename}")
-    
-    if len(new_files) > sample_size:
-        print(f"   ... and {len(new_files) - sample_size} more")
-    
-    print()
+    if new_files:
+        print(f"🆕 New files available ({len(new_files)} total):")
+        sample_size = min(10, len(new_files))
+        for filename in sorted(new_files)[:sample_size]:
+            print(f"   - {filename}")
+        
+        if len(new_files) > sample_size:
+            print(f"   ... and {len(new_files) - sample_size} more")
+        
+        print()
     
     if removed_files:
         print(f"⚠️  Files removed from Cricsheet ({len(removed_files)} total):")
