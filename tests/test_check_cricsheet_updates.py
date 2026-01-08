@@ -39,7 +39,7 @@ class TestGetLocalFiles:
         non_existent_dir = tmp_path / "data" / "raw" / "all_json"
         monkeypatch.setattr("check_cricsheet_updates.LOCAL_DATA_DIR", non_existent_dir)
         
-        result = get_local_files()
+        result = get_local_files(verbose=False)
         
         assert result == set()
         assert non_existent_dir.exists()
@@ -55,7 +55,7 @@ class TestGetLocalFiles:
         (data_dir / "1000853.json").touch()
         (data_dir / "notes.txt").touch()  # Should be ignored
         
-        result = get_local_files()
+        result = get_local_files(verbose=False)
         
         assert result == {"1000851.json", "1000853.json"}
     
@@ -65,9 +65,23 @@ class TestGetLocalFiles:
         data_dir.mkdir()
         monkeypatch.setattr("check_cricsheet_updates.LOCAL_DATA_DIR", data_dir)
         
-        result = get_local_files()
+        result = get_local_files(verbose=False)
         
         assert result == set()
+    
+    def test_verbose_output_shows_debug_info(self, tmp_path, monkeypatch, capsys):
+        """Should print debug info when verbose=True."""
+        data_dir = tmp_path / "all_json"
+        data_dir.mkdir()
+        (data_dir / "test.json").touch()
+        monkeypatch.setattr("check_cricsheet_updates.LOCAL_DATA_DIR", data_dir)
+        
+        result = get_local_files(verbose=True)
+        
+        captured = capsys.readouterr()
+        assert "[DEBUG]" in captured.out
+        assert "Checking local directory" in captured.out
+        assert "Found 1 local JSON files" in captured.out
 
 
 class TestGetCricsheetFiles:
@@ -161,6 +175,22 @@ class TestGetCricsheetFiles:
         assert exc_info.value.code == 1
         captured = capsys.readouterr()
         assert "Failed to read zip file" in captured.err
+    
+    def test_verbose_mode_shows_download_source(self, capsys):
+        """Should show download source in verbose mode."""
+        test_files = ["1000851.json"]
+        zip_data = self.create_test_zip(test_files)
+        
+        mock_response = Mock()
+        mock_response.content = zip_data.read()
+        mock_response.raise_for_status = Mock()
+        
+        with patch('requests.get', return_value=mock_response):
+            files, _ = get_cricsheet_files(verbose=True)
+        
+        captured = capsys.readouterr()
+        assert "[DEBUG] Downloading from:" in captured.out
+        assert "[DEBUG]" in captured.out  # Other debug messages
 
 
 class TestExtractFiles:
@@ -238,6 +268,19 @@ class TestExtractFiles:
         captured = capsys.readouterr()
         assert "✗" in captured.out  # Error marker for failed file
         assert "✓" in captured.out  # Success marker for successful file
+    
+    def test_verbose_output_on_extract(self, tmp_path, capsys):
+        """Should show verbose debug info during extraction."""
+        files_dict = {"1000851.json": '{"match": "data1"}'}
+        zip_data = self.create_test_zip_with_content(files_dict)
+        output_dir = tmp_path / "output"
+        output_dir.mkdir()
+        
+        result = extract_files(zip_data, ["1000851.json"], output_dir, verbose=True)
+        
+        captured = capsys.readouterr()
+        assert "[DEBUG] Extracting" in captured.out
+        assert "1 files" in captured.out
 
 
 class TestMain:
@@ -421,6 +464,22 @@ class TestMain:
         # Should suggest using limit flag
         assert "Or limit downloads:" in captured.out
         assert "--limit 100" in captured.out
+    
+    @patch('check_cricsheet_updates.get_local_files')
+    @patch('check_cricsheet_updates.get_cricsheet_files')
+    def test_verbose_mode_shows_debug_info(self, mock_get_cricsheet, mock_get_local, capsys):
+        """Should show debug info in verbose mode."""
+        mock_get_local.return_value = {"1000851.json"}
+        cricsheet_files = {"1000851.json", "1000853.json"}
+        mock_zip = self.create_mock_zip_data(cricsheet_files)
+        mock_get_cricsheet.return_value = (cricsheet_files, mock_zip)
+        
+        with patch('sys.argv', ['check_cricsheet_updates.py', '--verbose']):
+            main()
+        
+        captured = capsys.readouterr()
+        assert "[VERBOSE MODE ENABLED]" in captured.out
+        assert "[DEBUG] Comparison complete" in captured.out
 
 
 class TestIntegration:
