@@ -81,7 +81,7 @@ def extract_files(zip_data, files_to_extract, output_dir):
                     # Clean up empty directories
                     try:
                         extracted_path.parent.rmdir()
-                    except:
+                    except OSError:
                         pass
                 
                 print("✓")
