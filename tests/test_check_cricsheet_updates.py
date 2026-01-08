@@ -26,7 +26,7 @@ from check_cricsheet_updates import (
     get_cricsheet_files,
     extract_files,
     main,
-    CRICSHEET_ZIP_URL,
+    CRICSHEET_ZIP_URL
 )
 class TestGetLocalFiles:
     """Tests for get_local_files() function."""
@@ -73,7 +73,7 @@ class TestGetLocalFiles:
         (data_dir / "test.json").touch()
         monkeypatch.setattr("check_cricsheet_updates.LOCAL_DATA_DIR", data_dir)
         
-        result = get_local_files(verbose=True)
+        _ = get_local_files(verbose=True)
         
         captured = capsys.readouterr()
         assert "[DEBUG]" in captured.out
@@ -103,7 +103,7 @@ class TestGetCricsheetFiles:
         mock_response.raise_for_status = Mock()
         
         with patch('requests.get', return_value=mock_response) as mock_get:
-            files, returned_zip = get_cricsheet_files()
+            files, _ = get_cricsheet_files()
         
         assert files == {"1000851.json", "1000853.json", "1000855.json"}
         mock_get.assert_called_once_with(CRICSHEET_ZIP_URL, timeout=60)
@@ -183,7 +183,7 @@ class TestGetCricsheetFiles:
         mock_response.raise_for_status = Mock()
         
         with patch('requests.get', return_value=mock_response):
-            files, _ = get_cricsheet_files(verbose=True)
+            get_cricsheet_files(verbose=True)
         
         captured = capsys.readouterr()
         assert "[DEBUG] Downloading from:" in captured.out
@@ -273,7 +273,7 @@ class TestExtractFiles:
         output_dir = tmp_path / "output"
         output_dir.mkdir()
         
-        result = extract_files(zip_data, ["1000851.json"], output_dir, verbose=True)
+        _ = extract_files(zip_data, ["1000851.json"], output_dir, verbose=True)
         
         captured = capsys.readouterr()
         assert "[DEBUG] Extracting" in captured.out
