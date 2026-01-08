@@ -21,6 +21,7 @@ with deliveries as (
     , venue
     , city
     , event_name
+    , event_match_number
     , toss_winner
     , winner
   from {{ ref('int_cricket__matches_flattened') }}
@@ -57,6 +58,7 @@ select
   , m.venue
   , m.city
   , m.event_name
+  , m.event_match_number
   , m.toss_winner
   , m.winner
   , round(bi.runs_scored * 100.0 / nullif(bi.balls_faced, 0), 2) as strike_rate
