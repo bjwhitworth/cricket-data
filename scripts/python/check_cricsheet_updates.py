@@ -59,7 +59,6 @@ def get_cricsheet_files():
         - Prints error messages to stderr
         - Exits the program (sys.exit(1)) on failure
     """
-    """Download and inspect Cricsheet zip file to get list of available files."""
     print("   Downloading zip file metadata...", end=' ')
     
     try:
