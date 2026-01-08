@@ -21,6 +21,7 @@ venv/
 .env
 .python-version
 .ipynb_checkpoints/
+.coverage
 
 # IDE files
 .vscode/
@@ -41,3 +42,7 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 *.apdisk
+
+# Analyses files
+analyses/ideas.md
+
