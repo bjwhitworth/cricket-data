@@ -37,7 +37,7 @@ with deliveries as (
     , count(*)                                                                        as balls_faced
     , count_if(d.runs_batter = 4)                                                     as fours
     , count_if(d.runs_batter = 6)                                                     as sixes
-    , max(case when d.is_wicket and d.wicket_player_out = d.batter then 1 else 0 end) as was_out -- TODO: fix this, not working correctly
+    , max(case when d.is_wicket and d.wicket_player_out = d.batter then 1 else 0 end) as was_out
   from deliveries as d
   group by 1, 2, 3, 4
 )

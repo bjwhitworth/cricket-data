@@ -165,6 +165,7 @@ uv run pytest
 Run specific test file:
 ```bash
 uv run pytest tests/test_generate_match_narrative.py
+uv run pytest tests/test_check_cricsheet_updates.py
 ```
 
 Run with verbose output:
