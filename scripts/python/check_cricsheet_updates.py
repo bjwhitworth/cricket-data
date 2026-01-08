@@ -24,19 +24,27 @@ CRICSHEET_ZIP_URL = "https://cricsheet.org/downloads/all_json.zip"
 LOCAL_DATA_DIR = Path("data/raw/all_json")
 
 
-def get_local_files():
+def get_local_files(verbose=False):
     """Get list of JSON files already downloaded.
        Create the local data directory if it doesn't exist.
        Returns a set of filenames.
     """
+    if verbose:
+        print(f"   [DEBUG] Checking local directory: {LOCAL_DATA_DIR.absolute()}")
+    
     if not LOCAL_DATA_DIR.exists():
+        if verbose:
+            print(f"   [DEBUG] Directory doesn't exist, creating it")
         LOCAL_DATA_DIR.mkdir(parents=True, exist_ok=True)
         return set()
     
-    return {f.name for f in LOCAL_DATA_DIR.glob("*.json")}
+    local_files = {f.name for f in LOCAL_DATA_DIR.glob("*.json")}
+    if verbose:
+        print(f"   [DEBUG] Found {len(local_files)} local JSON files")
+    return local_files
 
 
-def get_cricsheet_files():
+def get_cricsheet_files(verbose=False):
     """
     Download and inspect Cricsheet zip file to get list of available files.
     This function fetches the Cricsheet zip archive from a remote URL using the `requests`
@@ -59,6 +67,9 @@ def get_cricsheet_files():
         - Prints error messages to stderr
         - Exits the program (sys.exit(1)) on failure
     """
+    if verbose:
+        print(f"   [DEBUG] Downloading from: {CRICSHEET_ZIP_URL}")
+
     print("   Downloading zip file metadata...", end=' ')
     
     try:
@@ -74,20 +85,28 @@ def get_cricsheet_files():
     # Read zip contents without extracting
     try:
         zip_data = io.BytesIO(response.content)
+        if verbose:
+            print(f"   [DEBUG] Downloaded {len(response.content) / 1024 / 1024:.1f} MB into memory")
         with zipfile.ZipFile(zip_data, 'r') as zip_ref:
+            if verbose:
+                print(f"   [DEBUG] Total files in zip: {len(zip_ref.namelist())}")
             # Get all JSON filenames in the zip
             json_files = {
                 name for name in zip_ref.namelist() 
                 if name.endswith('.json') and not name.startswith('__MACOSX')
             }
+            if verbose:
+                print(f"   [DEBUG] JSON files in zip: {len(json_files)}")
             return json_files, zip_data
     except zipfile.BadZipFile as e:
         print(f"❌ Failed to read zip file: {e}", file=sys.stderr)
         sys.exit(1)
 
 
-def extract_files(zip_data, files_to_extract, output_dir):
+def extract_files(zip_data, files_to_extract, output_dir, verbose=False):
     """Extract specific files from zip to output directory."""
+    if verbose:
+        print(f"   [DEBUG] Extracting {len(files_to_extract)} files to {output_dir.absolute()}")
     zip_data.seek(0)  # Reset to beginning
     
     with zipfile.ZipFile(zip_data, 'r') as zip_ref:
@@ -131,6 +150,11 @@ def main():
         default=None,
         help='Limit number of files to download'
     )
+    parser.add_argument(
+        '--verbose', '-v',
+        action='store_true',
+        help='Show verbose debug output'
+    )
     
     args = parser.parse_args()
     
@@ -138,9 +162,12 @@ def main():
     print(f"   Source: {CRICSHEET_ZIP_URL}")
     print(f"   Local:  {LOCAL_DATA_DIR.absolute()}\n")
     
+    if args.verbose:
+        print("[VERBOSE MODE ENABLED]\n")
+    
     # Get file lists
-    local_files = get_local_files()
-    cricsheet_files, zip_data = get_cricsheet_files()
+    local_files = get_local_files(verbose=args.verbose)
+    cricsheet_files, zip_data = get_cricsheet_files(verbose=args.verbose)
     
     # Validate download and zip processing worked
     if len(cricsheet_files) == 0:
@@ -151,6 +178,11 @@ def main():
     # Compare
     new_files = cricsheet_files - local_files
     removed_files = local_files - cricsheet_files
+    
+    if args.verbose:
+        print(f"   [DEBUG] Comparison complete")
+        print(f"   [DEBUG]   New files: {len(new_files)}")
+        print(f"   [DEBUG]   Removed files: {len(removed_files)}\n")
     
     # Report
     print(f"📊 Summary:")
@@ -197,7 +229,7 @@ def main():
         
         print(f"⬇️  Extracting {len(files_to_download)} files from zip...")
         
-        success_count = extract_files(zip_data, files_to_download, LOCAL_DATA_DIR)
+        success_count = extract_files(zip_data, files_to_download, LOCAL_DATA_DIR, verbose=args.verbose)
         
         print(f"\n✅ Extracted {success_count}/{len(files_to_download)} files successfully")
         
