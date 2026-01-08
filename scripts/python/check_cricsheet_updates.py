@@ -13,13 +13,11 @@ Usage:
 """
 
 import argparse
-import os
 import sys
 from pathlib import Path
 import requests
 import zipfile
 import io
-import tempfile
 
 
 CRICSHEET_ZIP_URL = "https://cricsheet.org/downloads/all_json.zip"
