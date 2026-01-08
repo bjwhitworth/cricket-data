@@ -280,7 +280,7 @@ class TestExtractFiles:
         assert "1 files" in captured.out
 
 
-class TestMain:
+        assert "1 file" in captured.out
     """Tests for main() function and command-line interface."""
     
     def create_mock_zip_data(self, filenames):
