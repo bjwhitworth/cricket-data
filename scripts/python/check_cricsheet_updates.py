@@ -118,10 +118,10 @@ def main():
     local_files = get_local_files()
     cricsheet_files, zip_data = get_cricsheet_files()
     
-    # Validate scraping worked
+    # Validate download and zip processing worked
     if len(cricsheet_files) == 0:
-        print("❌ Error: Found 0 files on Cricsheet. This likely means scraping failed.", file=sys.stderr)
-        print("   The website structure may have changed or the page is unavailable.", file=sys.stderr)
+        print("❌ Error: Found 0 files on Cricsheet. This likely means the download or zip processing failed.", file=sys.stderr)
+        print("   The download endpoint may have changed, the file may be unavailable, or the zip may be empty.", file=sys.stderr)
         sys.exit(1)
     
     # Compare
