@@ -65,7 +65,7 @@ Current coverage: **97%**
 
 Uncovered lines:
 - Lines 109-110: OSError exception handling in directory cleanup (edge case)
-- Line 218: `if __name__ == '__main__'` entry point (not executed during imports)
+- Line 248: `if __name__ == '__main__'` entry point (not executed during imports)
 
 ## Test Strategy
 
