@@ -148,7 +148,7 @@ models:
     description: One row per delivery with runs, extras, and wicket fields flattened.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns: [match_id, innings_number, delivery_idx]
+          combination_of_columns: [match_id, innings_number, over_number, delivery_idx]
     columns:
       - name: match_id
         tests:
