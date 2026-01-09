@@ -13,8 +13,17 @@ models:
         description: "Absolute path of the JSON file consumed by DuckDB."
         tests:
           - not_null
+          - unique
       - name: ingested_at
         description: "Timestamp recorded when dbt parsed the JSON payload."
+        tests:
+          - not_null
+      - name: meta_json
+        description: "Raw meta object parsed as JSON for debugging."
+      - name: info_json
+        description: "Raw info object parsed as JSON for debugging."
+      - name: innings_json
+        description: "Raw innings array parsed as JSON for debugging."
   - name: stg_cricket__matches
     description: "Match-level attributes (season, venue, toss, results) flattened from the raw JSON payload."
     columns:
@@ -22,19 +31,112 @@ models:
         tests:
           - not_null
           - unique
+      - name: season
+        description: "Season string from the source JSON."
+        tests:
+          - not_null
+      - name: match_type
+        description: "Match type (e.g., Test, ODI, T20)."
+        tests:
+          - not_null
+      - name: team_type
+        description: "Team type/category from the source."
+      - name: gender
+        description: "Competition gender classification."
+      - name: event_name
+        description: "Tournament/series/event name."
+      - name: event_match_number
+        description: "Event match number within the competition."
+      - name: event_stage
+        description: "Competition stage (e.g., Group, Knockout, Final)."
+      - name: event_group
+        description: "Competition group, if applicable."
+      - name: city
+        description: "City where the match was played (may be null in source data)."
+      - name: venue
+        description: "Venue/ground name."
+        tests:
+          - not_null
+      - name: toss_winner
+        description: "Team that won the toss."
+        tests:
+          - not_null
+      - name: toss_decision
+        description: "Toss decision (bat/field)."
+        tests:
+          - not_null
       - name: match_start_date
+        tests:
+          - not_null
+      - name: match_end_date
+        description: "End date of the match (or equals start date for single-day)."
         tests:
           - not_null
       - name: winner
         description: "Winning team, if the JSON outcome provides one."
       - name: result_type
         description: "Type of result: 'super_over', 'innings', 'wickets', 'runs', or result text if no winner."
+        tests:
+          - not_null
       - name: result_description
         description: "Human-readable description of the result including margin or super over rounds."
+        tests:
+          - not_null
+      - name: result_text_if_no_winner
+        description: "Result text when there is no explicit winner."
+      - name: win_by_runs
+        description: "Margin of victory by runs, if applicable."
+      - name: win_by_wickets
+        description: "Margin of victory by wickets, if applicable."
+      - name: win_by_innings
+        description: "Indicator/amount for innings victory, if applicable."
+      - name: outcome_method
+        description: "Method determining outcome (e.g., DLS)."
+      - name: bowl_out
+        description: "Bowl-out indicator or details, if applicable."
+      - name: team_1
+        description: "First team listed."
+        tests:
+          - not_null
+      - name: team_2
+        description: "Second team listed."
+        tests:
+          - not_null
+      - name: players_of_match
+        description: "List of players of the match (array)."
+      - name: participating_teams
+        description: "Array of participating team names."
+        tests:
+          - not_null
+      - name: umpires
+        description: "On-field umpires (array, may be null for some matches)."
+      - name: match_referees
+        description: "Match referee(s) (array)."
+      - name: tv_umpires
+        description: "TV umpire(s) (array)."
+      - name: players_by_team
+        description: "Mapping of team to player list (struct)."
+      - name: player_registry
+        description: "Registry mapping of player IDs to names."
+      - name: ingested_at
+        description: "Ingestion timestamp from raw JSON stage."
+        tests:
+          - not_null
       - name: super_over_rounds
         description: "Number of super over rounds played (0 if none). Calculated as ceil(super over innings / 2)."
+        tests:
+          - not_null
+      - name: match_type_number
+        description: "Ordinal number of the match within the match type."
+      - name: scheduled_overs
+        description: "Scheduled overs for the match (null for multi-day)."
+      - name: balls_per_over
+        description: "Balls per over configured for the match."
   - name: stg_cricket__innings
     description: "One row per innings with aggregate scoring totals and wickets per match."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [match_id, innings_number]
     columns:
       - name: match_id
         tests:
@@ -47,8 +149,23 @@ models:
           - not_null
       - name: is_super_over
         description: "Flag indicating if this innings is a super over."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
+      - name: recorded_over_count
+        description: "Number of overs recorded for the innings (null for incomplete/forfeited innings)."
+      - name: runs_total
+        description: "Total runs scored in the innings (null for incomplete/forfeited innings)."
+      - name: runs_extras
+        description: "Total extras in the innings (null for incomplete/forfeited innings)."
+      - name: wickets_fallen
+        description: "Total wickets fallen in the innings (null for incomplete/forfeited innings)."
   - name: stg_cricket__deliveries
     description: "Ball-by-ball feed with batters, bowlers, runs, extras, and (first) wicket metadata."
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [match_id, innings_number, over_number, ball_in_over]
     columns:
       - name: match_id
         tests:
@@ -62,5 +179,55 @@ models:
       - name: ball_in_over
         tests:
           - not_null
+      - name: batting_team
+        description: "Batting team for the delivery."
+        tests:
+          - not_null
       - name: batter
         description: "Striker recorded for the delivery."
+        tests:
+          - not_null
+      - name: non_striker
+        description: "Non-striker recorded for the delivery."
+        tests:
+          - not_null
+      - name: bowler
+        description: "Bowler for the delivery."
+        tests:
+          - not_null
+      - name: ingested_at
+        description: "Ingestion timestamp from raw JSON stage."
+        tests:
+          - not_null
+      - name: runs_batter
+        tests:
+          - not_null
+      - name: runs_extras
+        tests:
+          - not_null
+      - name: runs_total
+        tests:
+          - not_null
+      - name: extras_byes
+        description: "Byes runs on the delivery."
+      - name: extras_legbyes
+        description: "Leg byes runs on the delivery."
+      - name: extras_noballs
+        description: "No-ball runs on the delivery."
+      - name: extras_penalty
+        description: "Penalty runs on the delivery."
+      - name: extras_wides
+        description: "Wide ball runs on the delivery."
+      - name: is_wicket
+        tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
+      - name: wicket_player_out
+        description: "Player dismissed on the delivery, if any."
+      - name: wicket_kind
+        description: "Dismissal type (e.g., bowled, caught, lbw, run out)."
+      - name: wicket_fielder_1
+        description: "First fielder involved in the dismissal, if any."
+      - name: wicket_fielder_2
+        description: "Second fielder involved in the dismissal, if any."

@@ -8,21 +8,96 @@ models:
         tests:
           - not_null
           - unique
+      - name: season
+        description: "Season string from info.season."
+        tests:
+          - not_null
+      - name: match_type
+        description: "Match type (e.g., Test, ODI, T20)."
+        tests:
+          - not_null
+      - name: team_type
+        description: "Team type/category as provided in the source."
+      - name: gender
+        description: "Competition gender classification."
+      - name: event_name
+        description: "Tournament/series/event name."
+      - name: event_match_number
+        description: "Event match number within the competition."
+      - name: event_stage
+        description: "Competition stage (e.g., Group, Knockout, Final)."
+      - name: event_group
+        description: "Competition group, if applicable."
+      - name: city
+        description: "City where the match was played (may be null in source data)."
+      - name: venue
+        description: "Venue/ground name."
+        tests:
+          - not_null
+      - name: toss_winner
+        description: "Team that won the toss."
+        tests:
+          - not_null
+      - name: toss_decision
+        description: "Toss decision (bat/field)."
+        tests:
+          - not_null
       - name: winner
         description: "Winning team after eliminator/super over or regulation time."
       - name: result_type
         description: "Type of result: 'super_over', 'innings', 'wickets', 'runs', or tie/no result."
+        tests:
+          - not_null
       - name: result_description
         description: "Human-readable result including margin and super over round count."
+        tests:
+          - not_null
+      - name: result_text_if_no_winner
+        description: "Result text when there is no explicit winner."
+      - name: win_by_runs
+        description: "Margin of victory by runs, if applicable."
+      - name: win_by_wickets
+        description: "Margin of victory by wickets, if applicable."
+      - name: win_by_innings
+        description: "Indicator/amount for innings victory, if applicable."
+      - name: outcome_method
+        description: "Method determining outcome (e.g., DLS)."
+      - name: bowl_out
+        description: "Bowl-out indicator or details, if applicable."
       - name: super_over_rounds
         description: "Number of super over rounds played. 0 if no super overs."
+        tests:
+          - not_null
       - name: winner_after_regulation_time
         description: "Winner from regulation play (before eliminators)."
       - name: winner_after_eliminator
         description: "Winner after super over or bowl out eliminator."
+      - name: players_of_match
+        description: "List of players of the match (array)."
+      - name: participating_teams
+        description: "Array of participating team names."
+      - name: umpires
+        description: "On-field umpires (array)."
+      - name: match_referees
+        description: "Match referee(s) (array)."
+      - name: tv_umpires
+        description: "TV umpire(s) (array)."
+      - name: players_by_team
+        description: "Mapping of team to player list (struct)."
+      - name: player_registry
+        description: "Registry mapping of player IDs to names."
+      - name: data_version
+        description: "Source data version from meta."
+      - name: ingested_at
+        description: "Ingestion timestamp from raw JSON stage."
+        tests:
+          - not_null
       
   - name: int_cricket__innings_flattened
     description: One row per innings with raw inning struct and context.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [match_id, innings_number]
     columns:
       - name: match_id
         tests:
@@ -30,13 +105,26 @@ models:
       - name: innings_number
         tests:
           - not_null
+      - name: inning_struct
+        description: "Raw innings struct for detailed nested fields."
       - name: batting_team
+        tests:
+          - not_null
       - name: ingested_at
+        tests:
+          - not_null
       - name: is_super_over
         description: "Flag indicating if this innings is a super over."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
 
   - name: int_cricket__overs_flattened
     description: One row per over with ordinality preserved.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [match_id, innings_number, over_idx]
     columns:
       - name: match_id
         tests:
@@ -47,11 +135,20 @@ models:
       - name: over_idx
         tests:
           - not_null
+      - name: over_struct
+        description: "Raw over struct including deliveries (nested)."
       - name: batting_team
+        tests:
+          - not_null
       - name: ingested_at
+        tests:
+          - not_null
 
   - name: int_cricket__deliveries_flattened
     description: One row per delivery with runs, extras, and wicket fields flattened.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [match_id, innings_number, delivery_idx]
     columns:
       - name: match_id
         tests:
@@ -65,7 +162,54 @@ models:
       - name: delivery_idx
         tests:
           - not_null
+      - name: batting_team
+        description: "Batting team for the delivery."
+        tests:
+          - not_null
       - name: batter
+        description: "Striker on the delivery."
+        tests:
+          - not_null
+      - name: non_striker
+        description: "Non-striker on the delivery."
+        tests:
+          - not_null
       - name: bowler
+        tests:
+          - not_null
+      - name: runs_batter
+        tests:
+          - not_null
+      - name: runs_extras
+        tests:
+          - not_null
       - name: runs_total
+        tests:
+          - not_null
+      - name: extras_byes
+        description: "Byes runs on the delivery."
+      - name: extras_legbyes
+        description: "Leg byes runs on the delivery."
+      - name: extras_noballs
+        description: "No-ball runs on the delivery."
+      - name: extras_penalty
+        description: "Penalty runs on the delivery."
+      - name: extras_wides
+        description: "Wide ball runs on the delivery."
       - name: is_wicket
+        tests:
+          - not_null
+          - accepted_values:
+              values: [true, false]
+      - name: wicket_player_out
+        description: "Player dismissed on the delivery, if any."
+      - name: wicket_kind
+        description: "Dismissal type (e.g., bowled, caught, lbw, run out)."
+      - name: wicket_fielder_1
+        description: "First fielder involved in the dismissal, if any."
+      - name: wicket_fielder_2
+        description: "Second fielder involved in the dismissal, if any."
+      - name: wicket_struct
+        description: "Raw wicket struct for the first recorded wicket."
+      - name: wicket_struct_0
+        description: "Compatibility alias for first wicket struct (internal)."
