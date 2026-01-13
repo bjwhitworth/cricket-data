@@ -19,8 +19,6 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 models:
   cricket:
-    example:
-      +enabled: false
     intermediate:
       +materialized: view
       +tags: ['intermediate']

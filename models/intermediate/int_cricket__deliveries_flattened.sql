@@ -18,6 +18,7 @@ with overs as (
     , overs.innings_number
     , overs.batting_team
     , d.delivery_idx
+    , overs.over_idx
     , trim(both '"' from delivery_struct.batter::varchar)       as batter
     , trim(both '"' from delivery_struct.non_striker::varchar)  as non_striker
     , trim(both '"' from delivery_struct.bowler::varchar)       as bowler
