@@ -1,0 +1,66 @@
+version: 2
+
+models:
+  - name: fct_batter_innings_enhanced
+    description: "Enhanced batter innings fact table with batting position, partnerships, match context, and performance metrics including 'better than expected' calculations."
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "batting_position >= 1"
+      - dbt_utils.expression_is_true:
+          expression: "context_weighted_runs >= 0"
+    columns:
+      - name: match_id
+        tests:
+          - not_null
+      - name: innings_number
+        tests:
+          - not_null
+      - name: batter
+        tests:
+          - not_null
+      - name: runs_scored
+        tests:
+          - not_null
+      - name: balls_faced
+        tests:
+          - not_null
+      - name: batting_position
+        description: "Order in which batter came to crease (1 = opener)."
+      - name: batting_order_category
+        description: "Category: top_order, middle_order, tail."
+      - name: partnership_number
+        description: "Which partnership the batter was involved in."
+      - name: wicket_number
+        description: "Which wicket partnership (1st wicket, 2nd wicket, etc.)."
+      - name: partner
+        description: "Who the batter was batting with."
+      - name: partnership_runs
+        description: "Total runs in the partnership."
+      - name: pct_of_partnership
+        description: "Percentage of partnership runs scored by this batter."
+      - name: innings_context
+        description: "Whether batting first or chasing."
+      - name: target_runs
+        description: "Target to chase (null if batting first)."
+      - name: successfully_chased
+        description: "Whether team successfully chased the target."
+      - name: innings_team_won
+        description: "Whether batter's team won the match."
+      - name: career_avg_before_match
+        description: "Batter's career average before this match (excludes current innings)."
+      - name: runs_above_career_avg
+        description: "How many runs above/below career average (key 'better than expected' metric)."
+      - name: std_devs_above_avg
+        description: "Standard deviations above career average (>1.5 = significantly better than expected)."
+      - name: innings_category
+        description: "Category: century, half_century, substantial, start, low_score."
+        tests:
+          - accepted_values:
+              values: ['century', 'half_century', 'substantial', 'start', 'low_score']
+      - name: contribution_type
+        description: "Impact assessment: match_winning, important_contribution, foundation_partnership, successful_chase_contribution, standard."
+        tests:
+          - accepted_values:
+              values: ['match_winning', 'important_contribution', 'foundation_partnership', 'successful_chase_contribution', 'standard']
+      - name: context_weighted_runs
+        description: "Runs weighted by context (higher in pressure situations, chases, and wins). Use this to compare 'importance' of innings."

@@ -1,0 +1,150 @@
+version: 2
+
+models:
+  - name: int_cricket__batting_order
+    description: "Batting order/position for each batter in each innings, determined by first delivery faced."
+    columns:
+      - name: match_id
+        tests:
+          - not_null
+      - name: innings_number
+        tests:
+          - not_null
+      - name: batter
+        tests:
+          - not_null
+      - name: batting_position
+        description: "Order in which batter came to crease (1 = opener)."
+        tests:
+          - not_null
+
+  - name: int_cricket__partnerships
+    description: "Partnership statistics between consecutive batting pairs. A partnership ends when either batter gets out."
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "wicket_number between 1 and 10"
+      - dbt_utils.expression_is_true:
+          expression: "partnership_runs >= 0"
+      - dbt_utils.expression_is_true:
+          expression: "partnership_balls >= 1"
+    columns:
+      - name: match_id
+        tests:
+          - not_null
+      - name: innings_number
+        tests:
+          - not_null
+      - name: batting_team
+        tests:
+          - not_null
+      - name: partnership_number
+        description: "Sequential partnership number within the innings (0 = opening partnership)."
+        tests:
+          - not_null
+      - name: wicket_number
+        description: "Which wicket this partnership represents (1 = 1st wicket partnership)."
+      - name: batter_1
+        description: "First batter in the partnership."
+      - name: batter_2
+        description: "Second batter in the partnership (partner)."
+      - name: partnership_runs
+        description: "Total runs scored during the partnership."
+        tests:
+          - not_null
+      - name: partnership_balls
+        description: "Total balls faced during the partnership."
+        tests:
+          - not_null
+      - name: partnership_run_rate
+        description: "Run rate (runs per 100 balls) for the partnership."
+      - name: partnership_ended_in_wicket
+        description: "Whether the partnership ended with a dismissal."
+      - name: dismissed_batter
+        description: "Which batter was dismissed to end the partnership, if applicable."
+
+  - name: int_cricket__innings_context
+    description: "Match situation and context for each innings: batting first/chasing, target, outcome. Handles both Limited Overs (2 innings) and Test cricket (4+ innings with alternating teams)."
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "team_innings_number >= 1"
+      - dbt_utils.expression_is_true:
+          expression: "target_runs is null or target_runs >= 0"
+      - dbt_utils.expression_is_true:
+          expression: "runs_short_of_target is null or runs_short_of_target >= 0"
+    columns:
+      - name: match_id
+        tests:
+          - not_null
+      - name: innings_number
+        tests:
+          - not_null
+      - name: batting_team
+        tests:
+          - not_null
+      - name: innings_total
+        description: "Total runs scored in the innings."
+      - name: wickets_lost
+        description: "Wickets lost in the innings."
+      - name: match_type
+        description: "Match type (Test, ODI, T20, etc.) for context on innings sequencing."
+      - name: team_innings_number
+        description: "Sequence number for this team's innings (1st inning, 2nd inning, etc.)."
+      - name: innings_context
+        description: "Context: batting_first (team's 1st inning), chasing (any subsequent inning against opponent's total), batting_again (subsequent inning in Test without chasing a target)."
+        tests:
+          - accepted_values:
+              values: ['batting_first', 'chasing', 'batting_again']
+      - name: target_runs
+        description: "Target runs to match/beat (opponent's most recent innings + 1, null for batting first)."
+      - name: runs_short_of_target
+        description: "Runs short of target (negative if target exceeded)."
+      - name: successfully_chased
+        description: "Whether the team successfully reached/exceeded the target."
+      - name: winner
+        description: "Match winner."
+      - name: innings_team_won
+        description: "Whether the batting team won the match."
+
+  - name: int_cricket__delivery_context
+    description: "Ball-by-ball context for chasing innings: required run rate, pressure situation, runs/balls remaining."
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "runs_required >= 0 or pressure_situation = 'won'"
+      - dbt_utils.expression_is_true:
+          expression: "balls_remaining >= 0"
+      - dbt_utils.expression_is_true:
+          expression: "current_run_rate is null or current_run_rate >= 0"
+    columns:
+      - name: match_id
+        tests:
+          - not_null
+      - name: innings_number
+        tests:
+          - not_null
+      - name: delivery_idx
+        tests:
+          - not_null
+      - name: batter
+        tests:
+          - not_null
+      - name: runs_so_far
+        description: "Cumulative runs scored up to this delivery."
+      - name: balls_so_far
+        description: "Cumulative balls faced up to this delivery."
+      - name: wickets_so_far
+        description: "Cumulative wickets lost up to this delivery."
+      - name: target_runs
+        description: "Target runs to win."
+      - name: runs_required
+        description: "Runs still required to win."
+      - name: balls_remaining
+        description: "Balls remaining in the innings."
+      - name: required_run_rate
+        description: "Required run rate (runs per over) to win."
+      - name: current_run_rate
+        description: "Current run rate (runs per over)."
+      - name: pressure_situation
+        description: "Pressure level: low_pressure, moderate_pressure, high_pressure, extreme_pressure, won, all_out."
+        tests:
+          - accepted_values:
+              values: ['low_pressure', 'moderate_pressure', 'high_pressure', 'extreme_pressure', 'won', 'all_out']

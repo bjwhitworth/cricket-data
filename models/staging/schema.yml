@@ -1,6 +1,50 @@
 version: 2
 
 models:
+  - name: stg_cricket__narratives
+    description: "Parsed and validated match narratives from raw JSON. Staging layer for dbt transformation."
+    columns:
+      - name: raw_narrative_id
+        description: "Unique identifier for this raw narrative record."
+        tests:
+          - not_null
+          - unique
+      - name: match_id
+        description: "Cricket match identifier."
+        tests:
+          - not_null
+      - name: description_type
+        description: "Type of narrative (brief, full, etc)."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['brief', 'full']
+      - name: description
+        description: "Generated narrative text from Gemini."
+        tests:
+          - not_null
+      - name: generated_at
+        description: "Timestamp when narrative was generated."
+        tests:
+          - not_null
+      - name: model
+        description: "Gemini model used for generation."
+      - name: loaded_at
+        description: "Timestamp when record was inserted into raw table."
+        tests:
+          - not_null
+      - name: row_num
+        description: "Row number for each match_id + description_type (1 = most recent)."
+        tests:
+          - not_null
+
+sources:
+  - name: raw
+    description: "Raw data layer from Python scripts."
+    tables:
+      - name: raw_narratives
+        description: "Raw JSON narratives inserted by batch_match_descriptions.py and batch_match_descriptions_api.py"
+
   - name: stg_cricket__raw_json
     description: "Single-row-per-match ingestion of the JSON scorecards referenced via the glob returned by the cricket_raw_json_glob macro."
     columns:
