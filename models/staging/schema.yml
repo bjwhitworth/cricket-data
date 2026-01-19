@@ -43,7 +43,7 @@ sources:
     description: "Raw data layer from Python scripts."
     tables:
       - name: raw_narratives
-        description: "Raw JSON narratives inserted by batch_match_descriptions.py and batch_match_descriptions_api.py"
+        description: "Raw JSON narratives inserted by generate_match_narrative.py."
 
   - name: stg_cricket__raw_json
     description: "Single-row-per-match ingestion of the JSON scorecards referenced via the glob returned by the cricket_raw_json_glob macro."
