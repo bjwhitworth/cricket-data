@@ -1,6 +1,6 @@
 # Match Narrative Generation
 
-Scripts for generating natural language descriptions of cricket matches using Gemini LLM (gemini-2.0-flash-lite). Results stored as raw JSON and processed by dbt.
+Scripts for generating natural language descriptions of cricket matches using Gemini LLM (gemini-2.5-flash-lite). Results stored as raw JSON and processed by dbt.
 
 ## Overview
 
