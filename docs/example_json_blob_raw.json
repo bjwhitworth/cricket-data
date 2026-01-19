@@ -1,0 +1,8 @@
+{
+    "match_id": "1455611",
+    "description_type": "full",
+    "description": "Australia secured an eight-wicket victory over England in the Perth Ashes Test. England, after winning the toss and batting, posted 172 in their first innings, with significant contributions from Pope (46) and Brook (52). Starc was the destroyer-in-chief, taking 7/58. Australia faltered in their reply, bowled out for 132, with Head top-scoring with 21, and Stokes claiming 5/25.\n\nEngland's second innings saw them collapse to 164, setting Australia a target of 205. Starc continued his dominance with another three wickets, supported by Doggett and Boland. The Australian chase was spearheaded by a remarkable unbeaten 123 from Travis Head, aided by Labuschagne's 51, as they comfortably reached the target in just 29 overs, with Head being named Player of the Match for his match-winning century.",
+    "generated_at": "2026-01-16T15:11:10.009792",
+    "model": "gemini-2.5-flash-lite",
+    "source": "cli"
+}
