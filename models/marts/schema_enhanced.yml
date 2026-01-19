@@ -26,8 +26,6 @@ models:
           - not_null
       - name: batting_position
         description: "Order in which batter came to crease (1 = opener)."
-      - name: batting_order_category
-        description: "Category: top_order, middle_order, tail."
       - name: partnership_number
         description: "Which partnership the batter was involved in."
       - name: wicket_number
