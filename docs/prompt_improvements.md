@@ -1,0 +1,4 @@
+- Add clearer innings flow data, particularly highlighting innings in which the game was won.
+  - E.g. team innings number, batting
+- Add required chase details for limited overs matches and final innings of tests.
+- Proportion of runs scored by a batter or wickets taken -- should correlate with list of top performers.

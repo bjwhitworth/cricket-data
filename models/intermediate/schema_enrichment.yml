@@ -38,7 +38,7 @@ models:
         tests:
           - not_null
       - name: partnership_number
-        description: "Sequential partnership number within the innings (0 = opening partnership)."
+        description: "Sequential partnership number within the innings (1 = opening partnership)."
         tests:
           - not_null
       - name: wicket_number
