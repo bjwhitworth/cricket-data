@@ -21,8 +21,8 @@ with base_innings as (
   select
     match_id
     , innings_number
-    , batter_1 as batter
-    , batter_2 as partner
+    , batter_1      as batter
+    , batter_2      as partner
     , partnership_number
     , partnership_runs
     , partnership_balls
@@ -34,8 +34,8 @@ with base_innings as (
   select
     match_id
     , innings_number
-    , batter_1 as partner
-    , batter_2 as batter
+    , batter_1      as partner
+    , batter_2      as batter
     , partnership_number
     , partnership_runs
     , partnership_balls
@@ -120,14 +120,14 @@ select
   , bha.career_stddev_before_match
 
   -- Historical comparison
-  , coalesce(bi.batting_team = bi.winner, false)                         as batter_team_won
+  , coalesce(bi.batting_team = bi.winner, false)                                       as batter_team_won
   , round(p.batter_runs_in_partnership * 1.0 / nullif(p.partnership_runs, 0) * 100, 1) as pct_of_partnership
-  , round(bi.runs_scored - bha.career_avg_before_match, 1)               as runs_above_career_avg
+  , round(bi.runs_scored - bha.career_avg_before_match, 1)                             as runs_above_career_avg
   , case
     when bha.career_stddev_before_match > 0
       then
         round((bi.runs_scored - bha.career_avg_before_match) / bha.career_stddev_before_match, 2)
-  end                                                                    as std_devs_above_avg
+  end                                                                                  as std_devs_above_avg
 
   -- Performance indicators
   , case
@@ -136,7 +136,7 @@ select
     when bi.runs_scored >= 30 then 'substantial'
     when bi.runs_scored >= 10 then 'start'
     else 'low_score'
-  end                                                                    as innings_category
+  end                                                                                  as innings_category
 
   -- Match impact scoring
   , case
@@ -147,7 +147,7 @@ select
       ic.innings_context = 'chasing' and ic.successfully_chased = true and bi.runs_scored >= 30
       then 'successful_chase_contribution'
     else 'standard'
-  end                                                                    as contribution_type
+  end                                                                                  as contribution_type
 
   -- Context-weighted runs (higher value in pressure situations)
   , round(
@@ -156,7 +156,7 @@ select
     * case when ic.innings_context = 'chasing' then 1.2 else 1.0 end  -- More value when chasing
     * case when bi.batting_team = bi.winner then 1.3 else 1.0 end  -- More value in wins
     , 1
-  )                                                                      as context_weighted_runs
+  )                                                                                    as context_weighted_runs
 
 from base_innings as bi
 left join batting_positions as bp

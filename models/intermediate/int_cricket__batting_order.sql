@@ -5,21 +5,21 @@
 
 with first_ball_faced as (
   select
-    match_id,
-    innings_number,
-    batter,
-    min(delivery_idx) as first_delivery_idx
+    match_id
+    , innings_number
+    , batter
+    , min(delivery_idx) as first_delivery_idx
   from {{ ref('int_cricket__deliveries_flattened') }}
   group by 1, 2, 3
-),
+)
 
-batting_order as (
+, batting_order as (
   select
-    match_id,
-    innings_number,
-    batter,
-    first_delivery_idx,
-    row_number() over (
+    match_id
+    , innings_number
+    , batter
+    , first_delivery_idx
+    , row_number() over (
       partition by match_id, innings_number
       order by first_delivery_idx asc
     ) as batting_position
@@ -27,8 +27,8 @@ batting_order as (
 )
 
 select
-  match_id,
-  innings_number,
-  batter,
-  batting_position
+  match_id
+  , innings_number
+  , batter
+  , batting_position
 from batting_order

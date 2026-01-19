@@ -41,7 +41,6 @@ select
   , base.meta_json
   , base.info_json
   , meta.data_version
-  , replace(info.season::varchar, '"', '')                                                             as season
   , info.match_type
   , info.team_type
   , info.gender
@@ -77,6 +76,7 @@ select
   , info.registry.people
     as player_registry
   , base.ingested_at
+  , replace(info.season::varchar, '"', '')                                                             as season
   , coalesce(sor.super_over_rounds, 0)
     as super_over_rounds
   , if(outcome_struct.eliminator is not null, outcome_struct.eliminator, outcome_struct.winner)        as winner

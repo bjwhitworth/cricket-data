@@ -13,7 +13,7 @@ with match_registry as (
     , e.entry.key   as player_key
     , e.entry.value as player_name
   from match_registry as mr
-  cross join unnest(map_entries(mr.player_registry)) as e(entry)
+  cross join unnest(map_entries(mr.player_registry)) as e (entry)
   where typeof(mr.player_registry) = 'MAP'
 )
 

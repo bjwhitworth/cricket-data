@@ -8,36 +8,36 @@
 -- Intermediate layer: Handle versioning and enrich with match context
 -- Marks most recent narrative for each match_id + description_type
 
-WITH ranked_narratives AS (
-  SELECT
-    raw_narrative_id,
-    match_id,
-    description_type,
-    description,
-    generated_at,
-    model,
-    loaded_at,
-    ROW_NUMBER() OVER (PARTITION BY match_id, description_type ORDER BY generated_at DESC) AS version_num
-  FROM {{ ref('stg_cricket__narratives') }}
-),
-
-narratives AS (
-  SELECT
-    *,
-    CASE WHEN version_num = 1 THEN true ELSE false END AS is_most_recent
-  FROM ranked_narratives
-  WHERE version_num = 1
+with ranked_narratives as (
+  select
+    raw_narrative_id
+    , match_id
+    , description_type
+    , description
+    , generated_at
+    , model
+    , loaded_at
+    , ROW_NUMBER() over (partition by match_id, description_type order by generated_at desc) as version_num
+  from {{ ref('stg_cricket__narratives') }}
 )
 
-SELECT
-  raw_narrative_id,
-  match_id,
-  description_type,
-  description,
-  generated_at,
-  model,
-  loaded_at,
-  version_num,
-  is_most_recent,
-  ROW_NUMBER() OVER (ORDER BY generated_at DESC) AS created_row_id
-FROM narratives
+, narratives as (
+  select
+    *
+    , COALESCE(version_num = 1, false) as is_most_recent
+  from ranked_narratives
+  where version_num = 1
+)
+
+select
+  raw_narrative_id
+  , match_id
+  , description_type
+  , description
+  , generated_at
+  , model
+  , loaded_at
+  , version_num
+  , is_most_recent
+  , ROW_NUMBER() over (order by generated_at desc) as created_row_id
+from narratives

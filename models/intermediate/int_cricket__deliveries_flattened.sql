@@ -19,9 +19,18 @@ with overs as (
     , overs.batting_team
     , d.delivery_idx
     , overs.over_idx
-    , trim(both '"' from delivery_struct.batter::varchar)       as batter
-    , trim(both '"' from delivery_struct.non_striker::varchar)  as non_striker
-    , trim(both '"' from delivery_struct.bowler::varchar)       as bowler
+    , trim(
+      both '"' from delivery_struct.batter::varchar
+    )
+      as batter
+    , trim(
+      both '"' from delivery_struct.non_striker::varchar
+    )
+      as non_striker
+    , trim(
+      both '"' from delivery_struct.bowler::varchar
+    )
+      as bowler
     , try_cast(coalesce(overs.over_struct.over, overs.over_idx - 1) as integer)
       as over_number
     , try_cast(coalesce(delivery_struct.runs.batter, 0) as integer)
