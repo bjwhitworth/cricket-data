@@ -335,7 +335,7 @@ def generate_narrative(match_id: str, desc_type: Literal['brief', 'full'] = 'ful
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python scripts/python/generate_match_narrative.py <match_id> [--type brief|full] [--prompt] [--prompt-only]")
+        print("Usage: python scripts/python/generate_match_narrative.py <match_id> [--type brief|full] [--prompt] [--prompt-only] [--no-store]")
         sys.exit(1)
     
     # Parse arguments
