@@ -18,6 +18,7 @@ __pycache__/
 *.pyc
 venv/
 .venv/
+activate
 .env
 .python-version
 .ipynb_checkpoints/
@@ -45,4 +46,11 @@ Desktop.ini
 
 # Analyses files
 analyses/ideas.md
+analyses/*.R
+analyses/*.py
+
+# API batching
+batches/metadata/*
+batches/results/*
+batches/requests/*.jsonl
 
