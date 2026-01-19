@@ -163,7 +163,7 @@ def fetch_match_data(match_id: str) -> dict:
                     sum(runs_total) as runs_conceded,
                     count_if(is_wicket) as wickets
                 FROM stg_cricket__deliveries
-                WHERE match_id = ?
+                WHERE match_id::TEXT = ?
                 GROUP BY innings_number, bowler
             )
             SELECT 
