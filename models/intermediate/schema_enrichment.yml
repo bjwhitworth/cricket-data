@@ -19,10 +19,11 @@ models:
           - not_null
 
   - name: int_cricket__partnerships
-    description: "Partnership statistics between consecutive batting pairs. A partnership ends when either batter gets out."
+    description: "Partnership statistics between consecutive batting pairs. A partnership ends when either batter gets out (dismissal). Retired hurt/not out do not end partnerships but may increase partnership count."
     tests:
       - dbt_utils.expression_is_true:
-          expression: "wicket_number between 1 and 10"
+          expression: "dismissal_order between 1 and 10"
+          where: "dismissal_order is not null"
       - dbt_utils.expression_is_true:
           expression: "partnership_runs >= 0"
       - dbt_utils.expression_is_true:
@@ -38,11 +39,45 @@ models:
         tests:
           - not_null
       - name: partnership_number
-        description: "Sequential partnership number within the innings (1 = opening partnership)."
+        description: "Sequential partnership number within the innings (1 = opening partnership / 1st wicket)."
         tests:
           - not_null
-      - name: wicket_number
-        description: "Which wicket this partnership represents (1 = 1st wicket partnership)."
+      - name: batter_1
+        description: "First batter in the partnership."
+      - name: batter_2
+        description: "Second batter in the partnership (partner)."
+      - name: partnership_runs
+        description: "Total runs scored during the partnership."
+        tests:
+          - not_null
+      - name: partnership_balls
+        description: "Total balls faced during the partnership."
+        tests:
+          - not_null
+      - name: partnership_run_rate
+        description: "Run rate (runs per 100 balls) for the partnership."
+      - name: partnership_ended_in_wicket
+        description: "Whether the partnership ended with a dismissal."
+      - name: dismissed_batter
+        description: "Which batter was dismissed to end the partnership, if applicable."
+      - name: wicket_kind
+        description: "Dismissal type for the final batter in the partnership (null if innings not complete, 'retired hurt'/'retired not out' for non-dismissals)."
+      - name: dismissal_order
+        description: "Sequential rank of true dismissals only (1-10 typical, null for retirement partnerships). Ensures at most 10 true dismissals per innings."
+    columns:
+      - name: match_id
+        tests:
+          - not_null
+      - name: innings_number
+        tests:
+          - not_null
+      - name: batting_team
+        tests:
+          - not_null
+      - name: partnership_number
+        description: "Sequential partnership number within the innings (1 = opening partnership / 1st wicket)."
+        tests:
+          - not_null
       - name: batter_1
         description: "First batter in the partnership."
       - name: batter_2

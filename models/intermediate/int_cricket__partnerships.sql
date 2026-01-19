@@ -13,9 +13,11 @@ with deliveries_with_wickets as (
     batter,
     non_striker,
     runs_batter,
+    runs_extras,
     runs_total,
     is_wicket,
     wicket_player_out,
+    wicket_kind,
     -- Partnership ends when either current batter or non-striker gets out
     case
       when is_wicket and wicket_player_out in (batter, non_striker) then 1
@@ -48,11 +50,28 @@ partnership_base as (
     min(delivery_idx) as partnership_start_delivery,
     max(delivery_idx) as partnership_end_delivery,
     sum(runs_total) as partnership_runs,
+    sum(runs_extras) as partnership_extras,
     count(*) as partnership_balls,
     max(is_wicket) as partnership_ended_in_wicket,
-    max(case when is_wicket then wicket_player_out end) as dismissed_batter
+    max(case when is_wicket then wicket_player_out end) as dismissed_batter,
+    max(case when is_wicket then wicket_kind end) as wicket_kind
   from partnership_boundaries
   group by 1, 2, 3, 4
+),
+
+partnership_with_dismissal_order as (
+  select
+    *,
+    case
+      when wicket_kind is null or wicket_kind not ilike '%retired%'
+        then sum(case when wicket_kind is null or wicket_kind not ilike '%retired%' then 1 else 0 end)
+             over (
+               partition by match_id, innings_number, batting_team
+               order by partnership_number
+               rows between unbounded preceding and current row
+             )
+    end as dismissal_order
+  from partnership_base
 ),
 
 partnership_batters as (
@@ -89,13 +108,16 @@ select
   coalesce(b1.batter_runs, 0) as batter_1_runs,
   coalesce(b2.batter_runs, 0) as batter_2_runs,
   base.partnership_runs,
+  base.partnership_extras,
   base.partnership_balls,
   round(base.partnership_runs * 100.0 / nullif(base.partnership_balls, 0), 2) as partnership_run_rate,
   base.partnership_ended_in_wicket,
   base.dismissed_batter,
+  base.wicket_kind,
+  base.dismissal_order,
   base.partnership_start_delivery,
   base.partnership_end_delivery
-from partnership_base as base
+from partnership_with_dismissal_order as base
 left join partnership_batters as batters
   on
     base.match_id = batters.match_id
