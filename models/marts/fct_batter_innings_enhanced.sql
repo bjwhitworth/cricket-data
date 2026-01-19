@@ -27,6 +27,8 @@ with base_innings as (
     , partnership_runs
     , partnership_balls
     , partnership_run_rate
+    , batter_1_runs as batter_runs_in_partnership
+    , batter_2_runs as partner_runs_in_partnership
   from {{ ref('int_cricket__partnerships') }}
   union all
   select
@@ -38,6 +40,8 @@ with base_innings as (
     , partnership_runs
     , partnership_balls
     , partnership_run_rate
+    , batter_2_runs as batter_runs_in_partnership
+    , batter_1_runs as partner_runs_in_partnership
   from {{ ref('int_cricket__partnerships') }}
 )
 
@@ -101,6 +105,8 @@ select
   , p.partnership_runs
   , p.partnership_balls
   , p.partnership_run_rate
+  , p.batter_runs_in_partnership
+  , p.partner_runs_in_partnership
 
   -- Match context
   , ic.innings_context
@@ -115,7 +121,7 @@ select
 
   -- Historical comparison
   , coalesce(bi.batting_team = bi.winner, false)                         as batter_team_won
-  , round(bi.runs_scored * 1.0 / nullif(p.partnership_runs, 0) * 100, 1) as pct_of_partnership
+  , round(p.batter_runs_in_partnership * 1.0 / nullif(p.partnership_runs, 0) * 100, 1) as pct_of_partnership
   , round(bi.runs_scored - bha.career_avg_before_match, 1)               as runs_above_career_avg
   , case
     when bha.career_stddev_before_match > 0

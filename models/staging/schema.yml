@@ -38,13 +38,6 @@ models:
         tests:
           - not_null
 
-sources:
-  - name: raw
-    description: "Raw data layer from Python scripts."
-    tables:
-      - name: raw_narratives
-        description: "Raw JSON narratives inserted by generate_match_narrative.py."
-
   - name: stg_cricket__raw_json
     description: "Single-row-per-match ingestion of the JSON scorecards referenced via the glob returned by the cricket_raw_json_glob macro."
     columns:
@@ -68,6 +61,7 @@ sources:
         description: "Raw info object parsed as JSON for debugging."
       - name: innings_json
         description: "Raw innings array parsed as JSON for debugging."
+
   - name: stg_cricket__matches
     description: "Match-level attributes (season, venue, toss, results) flattened from the raw JSON payload."
     columns:
@@ -176,6 +170,7 @@ sources:
         description: "Scheduled overs for the match (null for multi-day)."
       - name: balls_per_over
         description: "Balls per over configured for the match."
+
   - name: stg_cricket__innings
     description: "One row per innings with aggregate scoring totals and wickets per match."
     tests:
@@ -205,6 +200,7 @@ sources:
         description: "Total extras in the innings (null for incomplete/forfeited innings)."
       - name: wickets_fallen
         description: "Total wickets fallen in the innings (null for incomplete/forfeited innings)."
+
   - name: stg_cricket__deliveries
     description: "Ball-by-ball feed with batters, bowlers, runs, extras, and (first) wicket metadata."
     tests:
@@ -275,3 +271,11 @@ sources:
         description: "First fielder involved in the dismissal, if any."
       - name: wicket_fielder_2
         description: "Second fielder involved in the dismissal, if any."
+
+sources:
+  - name: raw_source
+    description: "Raw data layer from Python scripts."
+    schema: main
+    tables:
+      - name: raw_narratives
+        description: "Raw JSON narratives inserted by generate_match_narrative.py."

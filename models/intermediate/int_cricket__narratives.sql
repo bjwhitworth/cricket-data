@@ -8,7 +8,7 @@
 -- Intermediate layer: Handle versioning and enrich with match context
 -- Marks most recent narrative for each match_id + description_type
 
-WITH narratives AS (
+WITH ranked_narratives AS (
   SELECT
     raw_narrative_id,
     match_id,
@@ -17,12 +17,16 @@ WITH narratives AS (
     generated_at,
     model,
     loaded_at,
-    ROW_NUMBER() OVER (PARTITION BY match_id, description_type ORDER BY generated_at DESC) AS version_num,
-    CASE WHEN ROW_NUMBER() OVER (PARTITION BY match_id, description_type ORDER BY generated_at DESC) = 1
-      THEN true ELSE false
-    END AS is_most_recent
+    ROW_NUMBER() OVER (PARTITION BY match_id, description_type ORDER BY generated_at DESC) AS version_num
   FROM {{ ref('stg_cricket__narratives') }}
-  WHERE is_most_recent = true
+),
+
+narratives AS (
+  SELECT
+    *,
+    CASE WHEN version_num = 1 THEN true ELSE false END AS is_most_recent
+  FROM ranked_narratives
+  WHERE version_num = 1
 )
 
 SELECT

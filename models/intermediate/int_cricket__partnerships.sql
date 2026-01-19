@@ -12,6 +12,7 @@ with deliveries_with_wickets as (
     batting_team,
     batter,
     non_striker,
+    runs_batter,
     runs_total,
     is_wicket,
     wicket_player_out,
@@ -38,7 +39,7 @@ partnership_boundaries as (
   from deliveries_with_wickets
 ),
 
-partnerships as (
+partnership_base as (
   select
     match_id,
     innings_number,
@@ -46,29 +47,72 @@ partnerships as (
     partnership_number,
     min(delivery_idx) as partnership_start_delivery,
     max(delivery_idx) as partnership_end_delivery,
-    -- Get the two batters involved (taking the most common pairing in this partnership)
-    mode(batter) as batter_1,
-    mode(non_striker) as batter_2,
     sum(runs_total) as partnership_runs,
     count(*) as partnership_balls,
     max(is_wicket) as partnership_ended_in_wicket,
     max(case when is_wicket then wicket_player_out end) as dismissed_batter
   from partnership_boundaries
   group by 1, 2, 3, 4
+),
+
+partnership_batters as (
+  select
+    match_id,
+    innings_number,
+    batting_team,
+    partnership_number,
+    mode(batter) as batter_1,
+    mode(non_striker) as batter_2
+  from partnership_boundaries
+  group by 1, 2, 3, 4
+),
+
+partnership_batter_runs as (
+  select
+    match_id,
+    innings_number,
+    batting_team,
+    partnership_number,
+    batter as player_name,
+    sum(runs_batter) as batter_runs
+  from partnership_boundaries
+  group by 1, 2, 3, 4, 5
 )
 
 select
-  match_id,
-  innings_number,
-  batting_team,
-  partnership_number,
-  batter_1,
-  batter_2,
-  partnership_runs,
-  partnership_balls,
-  round(partnership_runs * 100.0 / nullif(partnership_balls, 0), 2) as partnership_run_rate,
-  partnership_ended_in_wicket,
-  dismissed_batter,
-  partnership_start_delivery,
-  partnership_end_delivery
-from partnerships
+  base.match_id,
+  base.innings_number,
+  base.batting_team,
+  base.partnership_number,
+  batters.batter_1,
+  batters.batter_2,
+  coalesce(b1.batter_runs, 0) as batter_1_runs,
+  coalesce(b2.batter_runs, 0) as batter_2_runs,
+  base.partnership_runs,
+  base.partnership_balls,
+  round(base.partnership_runs * 100.0 / nullif(base.partnership_balls, 0), 2) as partnership_run_rate,
+  base.partnership_ended_in_wicket,
+  base.dismissed_batter,
+  base.partnership_start_delivery,
+  base.partnership_end_delivery
+from partnership_base as base
+left join partnership_batters as batters
+  on
+    base.match_id = batters.match_id
+    and base.innings_number = batters.innings_number
+    and base.batting_team = batters.batting_team
+    and base.partnership_number = batters.partnership_number
+left join partnership_batter_runs as b1
+  on
+    base.match_id = b1.match_id
+    and base.innings_number = b1.innings_number
+    and base.batting_team = b1.batting_team
+    and base.partnership_number = b1.partnership_number
+    and batters.batter_1 = b1.player_name
+left join partnership_batter_runs as b2
+  on
+    base.match_id = b2.match_id
+    and base.innings_number = b2.innings_number
+    and base.batting_team = b2.batting_team
+    and base.partnership_number = b2.partnership_number
+    and batters.batter_2 = b2.player_name
