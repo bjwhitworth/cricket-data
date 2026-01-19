@@ -28,8 +28,6 @@ models:
         description: "Order in which batter came to crease (1 = opener)."
       - name: partnership_number
         description: "Which partnership the batter was involved in."
-      - name: wicket_number
-        description: "Which wicket partnership (1st wicket, 2nd wicket, etc.)."
       - name: partner
         description: "Who the batter was batting with."
       - name: partnership_runs
