@@ -92,3 +92,14 @@ Marked innings aggregate fields (`recorded_over_count`, `runs_total`, `runs_extr
 All issues documented here have been incorporated into the dbt schema definitions and tests. Tests are configured to allow these null values while still validating critical fields like match_id, venue, teams, and core delivery data.
 
 **Last Updated:** 2026-01-09
+
+
+# TO ADD:
+
+- innings context data is rudimentary at the moment -- missing edge cases like declarations, follow-ons, etc.
+- verify versioning of 'most recent' narrative when we have pulled a bunch of batches in -- double filtering?
+- check descriptionconfig and json imports into `batch_match_descriptions.py`
+- consider adding tests for relationship between `team_1`/`team_2` and `participating_teams` array
+- Consider adding tests for configuration retrieval, JSON blob creation, and database storage functionality.
+- Exceptions in `batch_match_descriptions_api.py`: The function should either: (1) maintain a count of failures and report it in the summary (lines 225-226), or (2) raise the exception after cleanup to ensure the user is aware of preparation failures, especially for critical production batches.
+- check union all on batter/partner to ensure correctness
