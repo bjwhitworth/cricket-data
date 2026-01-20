@@ -34,8 +34,8 @@ with base_innings as (
   select
     match_id
     , innings_number
-    , batter_1      as partner
     , batter_2      as batter
+    , batter_1      as partner
     , partnership_number
     , partnership_runs
     , partnership_balls
@@ -58,6 +58,7 @@ with base_innings as (
 )
 
 -- Calculate each batter's historical average (excluding current match)
+-- TODO: this should probably be partitioned at least by type of match
 , batter_historical_avg as (
   select
     batter
@@ -74,6 +75,7 @@ with base_innings as (
     ) as career_stddev_before_match
   from base_innings
   where balls_faced >= 5  -- Exclude very short innings from average
+  qualify row_number() over (partition by batter, match_id order by innings_number asc) = 1
 )
 
 select
@@ -130,6 +132,7 @@ select
   end                                                                                  as std_devs_above_avg
 
   -- Performance indicators
+  -- Again, needs to be refined based on match type, opposition, conditions, etc. if we are including this
   , case
     when bi.runs_scored >= 100 then 'century'
     when bi.runs_scored >= 50 then 'half_century'
@@ -139,6 +142,7 @@ select
   end                                                                                  as innings_category
 
   -- Match impact scoring
+  -- TODO: don't like this, probably remove
   , case
     when bi.batting_team = bi.winner and bi.runs_scored >= 50 then 'match_winning'
     when bi.batting_team = bi.winner and bi.runs_scored >= 30 then 'important_contribution'

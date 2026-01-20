@@ -64,8 +64,8 @@ with deliveries_with_wickets as (
   select
     *
     , case
-      when wicket_kind is null or wicket_kind not ilike '%retired%'
-        then sum(case when wicket_kind is null or wicket_kind not ilike '%retired%' then 1 else 0 end)
+      when wicket_kind is not null and wicket_kind not ilike '%retired%'
+        then sum(case when wicket_kind is not null and wicket_kind not ilike '%retired%' then 1 else 0 end)
           over (
             partition by match_id, innings_number, batting_team
             order by partnership_number

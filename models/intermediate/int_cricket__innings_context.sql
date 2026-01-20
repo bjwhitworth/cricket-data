@@ -20,7 +20,7 @@ with match_info as (
     , innings_number
     , batting_team
     , sum(runs_total)                                                as innings_total
-    , count(distinct case when is_wicket then wicket_player_out end) as wickets_lost
+    , count(distinct case when is_wicket then wicket_player_out end) as wickets_lost -- TODO: handle retired hurt?
   from {{ ref('int_cricket__deliveries_flattened') }}
   group by 1, 2, 3
 )
@@ -62,6 +62,11 @@ with match_info as (
       partition by iwp.match_id, iwp.batting_team
       order by iwp.innings_number
     ) as team_innings_number
+    -- For follow-on detection: batting_team from immediately previous inning
+    , lag(iwp.batting_team, 1) over (
+      partition by iwp.match_id
+      order by iwp.innings_number
+    ) as previous_inning_batting_team
   from innings_with_previous as iwp
 )
 
@@ -79,7 +84,10 @@ with match_info as (
       when iwts.team_innings_number = 1 then 'batting_first'
       when iwts.match_type in ('ODI', 'T20') and iwts.team_innings_number = 2 then 'chasing'
       when iwts.match_type = 'Test' and iwts.team_innings_number = 2 then 'chasing'
-      when iwts.match_type = 'Test' and iwts.team_innings_number >= 3 then 'chasing'
+      when
+        iwts.match_type = 'Test'
+        and iwts.batting_team = iwts.previous_inning_batting_team
+        then 'following_on'  -- Same team bats consecutive innings
       else 'batting_again'
     end as innings_context
     -- Target is the opponent's most recent innings total + 1
@@ -115,8 +123,8 @@ select
     else iwc.target_runs - iwc.innings_total
   end                                             as runs_short_of_target
   , case
-    when iwc.innings_context in ('chasing', 'batting_again') and iwc.innings_total >= iwc.target_runs then true
-    when iwc.innings_context in ('chasing', 'batting_again') and iwc.innings_total < iwc.target_runs then false
+    when iwc.innings_context in ('chasing') and iwc.innings_total >= iwc.target_runs then true
+    when iwc.innings_context in ('chasing') and iwc.innings_total < iwc.target_runs then false
   end                                             as successfully_chased
   , coalesce(iwc.batting_team = mo.winner, false) as innings_team_won
 from innings_with_context as iwc
