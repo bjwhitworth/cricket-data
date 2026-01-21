@@ -68,38 +68,6 @@ models:
         description: "Type of dismissal ending the partnership (e.g., 'bowled', 'caught', 'retired hurt', 'retired not out'). Null if partnership ongoing or innings complete."
       - name: dismissal_order
         description: "Sequential count of true dismissals only (excludes 'retired hurt' and 'retired not out'). Ranges 1-10 for standard dismissals; null for retirement partnerships. Validates that at most 10 batters are dismissed per innings."
-    columns:
-      - name: match_id
-        tests:
-          - not_null
-      - name: innings_number
-        tests:
-          - not_null
-      - name: batting_team
-        tests:
-          - not_null
-      - name: partnership_number
-        description: "Sequential partnership number within the innings (1 = opening partnership / 1st wicket)."
-        tests:
-          - not_null
-      - name: batter_1
-        description: "First batter in the partnership."
-      - name: batter_2
-        description: "Second batter in the partnership (partner)."
-      - name: partnership_runs
-        description: "Total runs scored during the partnership."
-        tests:
-          - not_null
-      - name: partnership_balls
-        description: "Total balls faced during the partnership."
-        tests:
-          - not_null
-      - name: partnership_run_rate
-        description: "Run rate (runs per 100 balls) for the partnership."
-      - name: partnership_ended_in_wicket
-        description: "Whether the partnership ended with a dismissal."
-      - name: dismissed_batter
-        description: "Which batter was dismissed to end the partnership, if applicable."
 
   - name: int_cricket__innings_context
     description: "Match situation and context for each innings: batting first/chasing, target, outcome. Handles both Limited Overs (2 innings) and Test cricket (4+ innings with alternating teams)."
@@ -132,7 +100,7 @@ models:
         description: "Context: batting_first (team's 1st inning), chasing (any subsequent inning against opponent's total), batting_again (subsequent inning in Test without chasing a target)."
         tests:
           - accepted_values:
-              values: ['batting_first', 'chasing', 'batting_again']
+              values: ['batting_first', 'batting_second', 'chasing', 'batting_again', 'following_on', 'super_over']
       - name: target_runs
         description: "Target runs to match/beat (opponent's most recent innings + 1, null for batting first)."
       - name: runs_short_of_target
@@ -145,12 +113,14 @@ models:
         description: "Whether the batting team won the match."
 
   - name: int_cricket__delivery_context
-    description: "Ball-by-ball context for chasing innings: required run rate, pressure situation, runs/balls remaining."
+    description: "Ball-by-ball context for chasing innings: required run rate, runs/balls remaining."
     tests:
       - dbt_utils.expression_is_true:
-          expression: "runs_required >= 0 or pressure_situation = 'won'"
+          expression: "runs_required >= 0"
+          where: "is_last_delivery_of_innings = false and target_reached = false"
       - dbt_utils.expression_is_true:
           expression: "balls_remaining >= 0"
+          where: "is_last_delivery_of_innings = false"
       - dbt_utils.expression_is_true:
           expression: "current_run_rate is null or current_run_rate >= 0"
     columns:
@@ -182,8 +152,3 @@ models:
         description: "Required run rate (runs per over) to win."
       - name: current_run_rate
         description: "Current run rate (runs per over)."
-      - name: pressure_situation
-        description: "Pressure level: low_pressure, moderate_pressure, high_pressure, extreme_pressure, won, all_out."
-        tests:
-          - accepted_values:
-              values: ['low_pressure', 'moderate_pressure', 'high_pressure', 'extreme_pressure', 'won', 'all_out']

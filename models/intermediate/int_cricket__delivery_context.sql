@@ -39,19 +39,53 @@ with match_config as (
     -- Running totals
     , sum(d.runs_total) over (
       partition by d.match_id, d.innings_number
-      order by d.delivery_idx
+      order by d.over_number, d.delivery_idx
       rows between unbounded preceding and current row
     ) as runs_so_far
     , count(*) over (
       partition by d.match_id, d.innings_number
-      order by d.delivery_idx
+      order by d.over_number, d.delivery_idx
       rows between unbounded preceding and current row
     ) as balls_so_far
     , count_if(d.is_wicket) over (
       partition by d.match_id, d.innings_number
-      order by d.delivery_idx
+      order by d.over_number, d.delivery_idx
       rows between unbounded preceding and current row
     ) as wickets_so_far
+    -- Cumulative count of wides and no balls (which count as additional deliveries)
+    , count_if(d.extras_wides > 0 or d.extras_noballs > 0) over (
+      partition by d.match_id, d.innings_number
+      order by d.over_number, d.delivery_idx
+      rows between unbounded preceding and current row
+    ) as extras_deliveries_so_far
+    -- Legal delivery indicator (excludes wides and no balls)
+    , (coalesce(d.extras_wides, 0) = 0 and coalesce(d.extras_noballs, 0) = 0) as is_legal_delivery
+    , d.is_miscounted_over_from_data
+    -- Sequential count of legal deliveries within the over
+    , sum(case when coalesce(d.extras_wides, 0) = 0 and coalesce(d.extras_noballs, 0) = 0 then 1 else 0 end) over (
+      partition by d.match_id, d.innings_number, d.over_number
+      order by d.delivery_idx
+      rows between unbounded preceding and current row
+    ) as legal_delivery_seq_in_over
+    -- Total legal deliveries in this over
+    , sum(case when coalesce(d.extras_wides, 0) = 0 and coalesce(d.extras_noballs, 0) = 0 then 1 else 0 end) over (
+      partition by d.match_id, d.innings_number, d.over_number
+    ) as legal_deliveries_in_over_total
+    -- Total deliveries in this over (including wides/no balls)
+    , count(*) over (
+      partition by d.match_id, d.innings_number, d.over_number
+    ) as total_deliveries_in_over
+    -- Cumulative count of legal deliveries (excluding wides and no balls)
+    , count_if(coalesce(d.extras_wides, 0) = 0 and coalesce(d.extras_noballs, 0) = 0) over (
+      partition by d.match_id, d.innings_number
+      order by d.over_number, d.delivery_idx
+      rows between unbounded preceding and current row
+    ) as legal_deliveries_so_far
+    -- Sequential delivery number in the innings
+    , row_number() over (
+      partition by d.match_id, d.innings_number
+      order by d.over_number, d.delivery_idx
+    ) as delivery_number_in_innings
   from {{ ref('int_cricket__deliveries_flattened') }} as d
 )
 
@@ -70,36 +104,39 @@ select
   , dwrt.runs_so_far
   , dwrt.balls_so_far
   , dwrt.wickets_so_far
+  , dwrt.extras_deliveries_so_far
+  , dwrt.legal_deliveries_so_far
+  , dwrt.is_legal_delivery
+  , dwrt.legal_delivery_seq_in_over
+  , dwrt.legal_deliveries_in_over_total
+  , dwrt.total_deliveries_in_over
+  , dwrt.is_miscounted_over_from_data
   , ic.target_runs
-  , ic.target_runs - dwrt.runs_so_far                            as runs_required
-  , mc.scheduled_overs * mc.balls_per_over                       as total_balls_in_innings
-  , (mc.scheduled_overs * mc.balls_per_over) - dwrt.balls_so_far as balls_remaining
+  , ic.target_runs - dwrt.runs_so_far                                                            as runs_required
+  , mc.scheduled_overs
+  * mc.balls_per_over
+    as total_balls_in_innings
+  , (mc.scheduled_overs * mc.balls_per_over) - dwrt.legal_deliveries_so_far as balls_remaining
+  , dwrt.delivery_number_in_innings = max(dwrt.delivery_number_in_innings)
+    over (
+      partition by dwrt.match_id, dwrt.innings_number
+    )
+    as is_last_delivery_of_innings
+  , dwrt.runs_so_far >= ic.target_runs as target_reached
+  -- Miscount flags: over and delivery-level
+  , (dwrt.legal_deliveries_in_over_total <> mc.balls_per_over) as is_miscounted_over
+  , (dwrt.is_legal_delivery and dwrt.legal_delivery_seq_in_over > mc.balls_per_over) as is_miscounted_delivery
   -- Required run rate: runs needed per over
   , round(
     (ic.target_runs - dwrt.runs_so_far) * 6.0
-    / nullif((mc.scheduled_overs * mc.balls_per_over) - dwrt.balls_so_far, 0)
+    / nullif((mc.scheduled_overs * mc.balls_per_over) - dwrt.legal_deliveries_so_far, 0)
     , 2
-  )                                                              as required_run_rate
+  )                                                                                              as required_run_rate
   -- Current run rate
   , round(
     dwrt.runs_so_far * 6.0 / nullif(dwrt.balls_so_far, 0)
     , 2
-  )                                                              as current_run_rate
-  -- Pressure indicator: high when RRR much higher than current RR
-  , case
-    when ic.target_runs - dwrt.runs_so_far <= 0 then 'won'
-    when dwrt.wickets_so_far >= 10 then 'all_out'
-    when
-      (ic.target_runs - dwrt.runs_so_far) * 6.0
-      / nullif((mc.scheduled_overs * mc.balls_per_over) - dwrt.balls_so_far, 0) > 12 then 'extreme_pressure'
-    when
-      (ic.target_runs - dwrt.runs_so_far) * 6.0
-      / nullif((mc.scheduled_overs * mc.balls_per_over) - dwrt.balls_so_far, 0) > 9 then 'high_pressure'
-    when
-      (ic.target_runs - dwrt.runs_so_far) * 6.0
-      / nullif((mc.scheduled_overs * mc.balls_per_over) - dwrt.balls_so_far, 0) > 6 then 'moderate_pressure'
-    else 'low_pressure'
-  end                                                            as pressure_situation
+  )                                                                                              as current_run_rate
 from deliveries_with_running_totals as dwrt
 left join innings_context as ic
   on
