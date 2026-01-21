@@ -110,7 +110,6 @@ select
   , dwrt.legal_delivery_seq_in_over
   , dwrt.legal_deliveries_in_over_total
   , dwrt.total_deliveries_in_over
-  , dwrt.is_miscounted_over_from_data
   , ic.target_runs
   , ic.target_runs - dwrt.runs_so_far                                                            as runs_required
   , mc.scheduled_overs
@@ -125,9 +124,12 @@ select
     )
     as is_last_delivery_of_innings
   , dwrt.runs_so_far >= ic.target_runs as target_reached
-  -- Miscount flags: over and delivery-level
-  , (dwrt.legal_deliveries_in_over_total <> mc.balls_per_over) as is_miscounted_over
-  , (dwrt.is_legal_delivery and dwrt.legal_delivery_seq_in_over > mc.balls_per_over) as is_miscounted_delivery
+  -- Miscount flags: from raw data and computed
+  , dwrt.is_miscounted_over_from_data
+  , (dwrt.legal_deliveries_in_over_total <> mc.balls_per_over) as is_miscounted_over_computed
+  , (dwrt.is_legal_delivery and dwrt.legal_delivery_seq_in_over > mc.balls_per_over) as is_miscounted_delivery_computed
+  -- Verify: data flag matches computed (for data quality check)
+  , dwrt.is_miscounted_over_from_data = (dwrt.legal_deliveries_in_over_total <> mc.balls_per_over) as miscount_check_passed
   -- Required run rate: runs needed per over
   , round(
     (ic.target_runs - dwrt.runs_so_far) * 6.0
