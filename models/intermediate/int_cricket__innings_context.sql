@@ -102,7 +102,7 @@ with match_info as (
       when iwts.match_type in ('ODI', 'T20', 'IT20', 'ODM')
         and iwts.innings_number = 2 
         then 'chasing'
-      when iwts.match_type in ('ODI', 'T20', 'IT20') -- TODO: need to add a match type group for 1 innings vs. 2
+      when iwts.match_type in ('ODI', 'T20', 'IT20', 'ODM') -- TODO: need to add a match type group for 1 innings vs. 2
         and iwts.innings_number > 2
         then 'super_over' -- Super overs, etc.
 
