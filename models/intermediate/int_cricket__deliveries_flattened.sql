@@ -8,6 +8,7 @@ with overs as (
     , batting_team
     , over_idx
     , over_struct
+    , is_miscounted_over_from_data
   from {{ ref('int_cricket__overs_flattened') }}
 )
 
@@ -17,6 +18,7 @@ with overs as (
     , overs.ingested_at
     , overs.innings_number
     , overs.batting_team
+    , overs.is_miscounted_over_from_data
     , d.delivery_idx
     , overs.over_idx
     , trim(

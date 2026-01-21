@@ -6,8 +6,6 @@ models:
     tests:
       - dbt_utils.expression_is_true:
           expression: "batting_position >= 1"
-      - dbt_utils.expression_is_true:
-          expression: "context_weighted_runs >= 0"
     columns:
       - name: match_id
         tests:
@@ -52,11 +50,4 @@ models:
         description: "Category: century, half_century, substantial, start, low_score."
         tests:
           - accepted_values:
-              values: ['century', 'half_century', 'substantial', 'start', 'low_score']
-      - name: contribution_type
-        description: "Impact assessment: match_winning, important_contribution, foundation_partnership, successful_chase_contribution, standard."
-        tests:
-          - accepted_values:
-              values: ['match_winning', 'important_contribution', 'foundation_partnership', 'successful_chase_contribution', 'standard']
-      - name: context_weighted_runs
-        description: "Runs weighted by context (higher in pressure situations, chases, and wins). Use this to compare 'importance' of innings."
+              values: ['triple_hundred', 'double_hundred', 'hundred_and_fifty', 'hundred', 'fifty']

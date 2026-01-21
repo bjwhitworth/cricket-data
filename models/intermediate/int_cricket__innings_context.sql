@@ -67,6 +67,18 @@ with match_info as (
       partition by iwp.match_id
       order by iwp.innings_number
     ) as previous_inning_batting_team
+    -- Cumulative runs for this team up to (but not including) this innings
+    , sum(iwp.innings_total) over (
+      partition by iwp.match_id, iwp.batting_team
+      order by iwp.innings_number
+      rows between unbounded preceding and 1 preceding
+    ) as team_cumulative_runs_before_this_innings
+    -- Total runs by both teams up to (but not including) this innings
+    , sum(iwp.innings_total) over (
+      partition by iwp.match_id
+      order by iwp.innings_number
+      rows between unbounded preceding and 1 preceding
+    ) as total_cumulative_runs_before_this_innings
   from innings_with_previous as iwp
 )
 
@@ -81,18 +93,62 @@ with match_info as (
     , iwts.team_innings_number
     , iwts.match_type
     , case
-      when iwts.team_innings_number = 1 then 'batting_first'
-      when iwts.match_type in ('ODI', 'T20') and iwts.team_innings_number = 2 then 'chasing'
-      when iwts.match_type = 'Test' and iwts.team_innings_number = 2 then 'chasing'
-      when
-        iwts.match_type = 'Test'
+
+      -- First innings of any match
+      when iwts.innings_number = 1
+        then 'batting_first'
+
+      -- Limited Overs match situations
+      when iwts.match_type in ('ODI', 'T20', 'IT20', 'ODM')
+        and iwts.innings_number = 2 
+        then 'chasing'
+      when iwts.match_type in ('ODI', 'T20', 'IT20') -- TODO: need to add a match type group for 1 innings vs. 2
+        and iwts.innings_number > 2
+        then 'super_over' -- Super overs, etc.
+
+      -- Test match situations
+      when iwts.match_type in ('Test', 'MDM')
+        and iwts.team_innings_number = 2
+        and iwts.innings_number = 4
+        then 'chasing'
+      when iwts.match_type in ('Test', 'MDM')
         and iwts.batting_team = iwts.previous_inning_batting_team
         then 'following_on'  -- Same team bats consecutive innings
-      else 'batting_again'
+      when iwts.match_type in ('Test', 'MDM')
+        and iwts.team_innings_number = 2
+        and iwts.innings_number = 3
+        then 'batting_again'
+      when iwts.match_type in ('Test', 'MDM')
+        and iwts.team_innings_number = 1
+        and iwts.innings_number = 2
+        then 'batting_second'
     end as innings_context
-    -- Target is the opponent's most recent innings total + 1
+    
+    -- Context-aware target calculation
     , case
-      when iwts.team_innings_number > 1 then iwts.previous_innings_total + 1
+      -- Limited Overs: chasing in innings 2
+      when iwts.match_type in ('ODI', 'T20', 'IT20', 'ODM')
+        and iwts.innings_number = 2
+        then iwts.previous_innings_total + 1
+      
+      -- Super over: even-numbered innings are chasing
+      when iwts.match_type in ('ODI', 'T20', 'IT20', 'ODM')
+        and iwts.innings_number > 2
+        and iwts.innings_number % 2 = 0
+        then iwts.previous_innings_total + 1
+      
+      -- Test: chasing in 4th innings (team's 2nd innings)
+      -- Target = (opponent total across both innings) - (own first innings) + 1
+      when iwts.match_type in ('Test', 'MDM')
+        and iwts.team_innings_number = 2
+        and iwts.innings_number = 4
+        then (iwts.total_cumulative_runs_before_this_innings - coalesce(iwts.team_cumulative_runs_before_this_innings, 0)) + 1
+      
+      -- Test: following on (avoiding innings defeat)
+      -- Target = (opponent first innings) - (own first innings) + 1
+      when iwts.match_type in ('Test', 'MDM')
+        and iwts.batting_team = iwts.previous_inning_batting_team
+        then iwts.previous_innings_total - coalesce(iwts.team_cumulative_runs_before_this_innings, 0) + 1
     end as target_runs
   from innings_with_team_sequence as iwts
 )

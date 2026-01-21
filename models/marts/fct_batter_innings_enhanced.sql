@@ -134,33 +134,13 @@ select
   -- Performance indicators
   -- Again, needs to be refined based on match type, opposition, conditions, etc. if we are including this
   , case
-    when bi.runs_scored >= 100 then 'century'
-    when bi.runs_scored >= 50 then 'half_century'
-    when bi.runs_scored >= 30 then 'substantial'
-    when bi.runs_scored >= 10 then 'start'
-    else 'low_score'
+    when bi.runs_scored >= 300 then 'triple_hundred'
+    when bi.runs_scored >= 200 then 'double_hundred'
+    when bi.runs_scored >= 150 then 'hundred_and_fifty'
+    when bi.runs_scored >= 100 then 'hundred'
+    when bi.runs_scored >= 50 then 'fifty'
+    else null
   end                                                                                  as innings_category
-
-  -- Match impact scoring
-  -- TODO: don't like this, probably remove
-  , case
-    when bi.batting_team = bi.winner and bi.runs_scored >= 50 then 'match_winning'
-    when bi.batting_team = bi.winner and bi.runs_scored >= 30 then 'important_contribution'
-    when p.partnership_runs > 100 and p.partnership_number <= 3 then 'foundation_partnership'
-    when
-      ic.innings_context = 'chasing' and ic.successfully_chased = true and bi.runs_scored >= 30
-      then 'successful_chase_contribution'
-    else 'standard'
-  end                                                                                  as contribution_type
-
-  -- Context-weighted runs (higher value in pressure situations)
-  , round(
-    bi.runs_scored
-    * (1 + coalesce(p.partnership_number / 10.0, 0))  -- More value when batting lower in order
-    * case when ic.innings_context = 'chasing' then 1.2 else 1.0 end  -- More value when chasing
-    * case when bi.batting_team = bi.winner then 1.3 else 1.0 end  -- More value in wins
-    , 1
-  )                                                                                    as context_weighted_runs
 
 from base_innings as bi
 left join batting_positions as bp
