@@ -76,7 +76,7 @@ with match_config as (
       partition by d.match_id, d.innings_number, d.over_number
     ) as total_deliveries_in_over
     -- Cumulative count of legal deliveries (excluding wides and no balls)
-    , count_if(d.extras_wides = 0 and d.extras_noballs = 0) over (
+    , count_if(coalesce(d.extras_wides, 0) = 0 and coalesce(d.extras_noballs, 0) = 0) over (
       partition by d.match_id, d.innings_number
       order by d.over_number, d.delivery_idx
       rows between unbounded preceding and current row
