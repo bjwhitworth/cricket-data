@@ -114,6 +114,8 @@ select
   , ic.target_runs
   , ic.target_runs - dwrt.runs_so_far                                                            as runs_required
   , mc.scheduled_overs
+  , mc.balls_per_over
+  , mc.scheduled_overs
   * mc.balls_per_over
     as total_balls_in_innings
   , (mc.scheduled_overs * mc.balls_per_over) - dwrt.legal_deliveries_so_far as balls_remaining
