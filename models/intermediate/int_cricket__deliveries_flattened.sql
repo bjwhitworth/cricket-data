@@ -21,6 +21,8 @@ with overs as (
     , overs.is_miscounted_over_from_data
     , d.delivery_idx
     , overs.over_idx
+    , overs.over_idx
+      as over_number
     , trim(
       both '"' from delivery_struct.batter::varchar
     )
@@ -33,8 +35,6 @@ with overs as (
       both '"' from delivery_struct.bowler::varchar
     )
       as bowler
-    , try_cast(coalesce(overs.over_struct.over, overs.over_idx - 1) as integer)
-      as over_number
     , try_cast(coalesce(delivery_struct.runs.batter, 0) as integer)
       as runs_batter
     , try_cast(coalesce(delivery_struct.runs.extras, 0) as integer)
