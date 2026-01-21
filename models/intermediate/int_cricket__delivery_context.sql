@@ -129,7 +129,7 @@ select
   -- Required run rate: runs needed per over
   , round(
     (ic.target_runs - dwrt.runs_so_far) * 6.0
-    / nullif((mc.scheduled_overs * mc.balls_per_over) - dwrt.balls_so_far, 0)
+    / nullif((mc.scheduled_overs * mc.balls_per_over) - dwrt.legal_deliveries_so_far, 0)
     , 2
   )                                                                                              as required_run_rate
   -- Current run rate
