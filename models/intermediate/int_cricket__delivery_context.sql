@@ -9,6 +9,7 @@ with match_config as (
     , match_type
     , scheduled_overs
     , balls_per_over
+    , gender
   from {{ ref('int_cricket__matches_flattened') }}
 )
 
@@ -91,6 +92,7 @@ with match_config as (
 
 select
   dwrt.match_id
+  , mc.gender
   , dwrt.innings_number
   , dwrt.batting_team
   , dwrt.delivery_idx

@@ -18,6 +18,7 @@ with deliveries as (
 , matches as (
   select
     match_id
+    , gender
     , season
     , match_type
     , match_start_date
@@ -88,6 +89,7 @@ select
   , bi.noballs
   , bi.fours_conceded
   , bi.sixes_conceded
+  , m.gender
   , m.season
   , m.match_type
   , m.match_start_date
