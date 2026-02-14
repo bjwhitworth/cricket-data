@@ -25,6 +25,18 @@ with base as (
   from {{ ref('stg_cricket__raw_json') }}
 )
 
+, match_venues as (
+  select
+    match_id
+    , venue_id
+    , venue
+    , venue_from_source
+    , city_from_source
+    , city_mapped_or_source
+    , match_country
+  from {{ ref('int_cricket__match_venues') }}
+)
+
 , super_over_rounds as (
   select
     match_id
@@ -49,8 +61,12 @@ select
     as event_match_number
   , event_struct.stage                                                                                 as event_stage
   , event_struct."group"                                                                               as event_group
-  , info.city
-  , info.venue
+  , mv.city_from_source
+  , mv.city_mapped_or_source
+  , mv.venue_from_source
+  , mv.venue_id
+  , mv.venue
+  , mv.match_country
   , info.toss.winner                                                                                   as toss_winner
   , info.toss.decision                                                                                 as toss_decision
   , outcome_struct.winner
@@ -119,6 +135,8 @@ select
   , try_cast(coalesce(list_extract(info.dates, len(info.dates)), list_extract(info.dates, 1)) as date) as match_end_date
   , info.teams[1]                                                                                      as team_1
   , info.teams[2]                                                                                      as team_2
+  , {{ get_nation_type('info.teams[1]') }}                                                             as nation_type_team_1
+  , {{ get_nation_type('info.teams[2]') }}                                                             as nation_type_team_2
   , try_cast(meta.revision as integer)                                                                 as data_revision
   , try_cast(meta.created as date)
     as data_created_date
@@ -128,5 +146,7 @@ select
 from base
 left join super_over_rounds as sor
   on base.match_id = sor.match_id
+left join match_venues as mv
+  on base.match_id = mv.match_id
 
 -- TODO: Add match length in days

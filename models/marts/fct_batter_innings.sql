@@ -15,15 +15,21 @@ with deliveries as (
 , matches as (
   select
     match_id
+    , venue_id
     , season
     , match_type
     , match_start_date
     , venue
-    , city
+    , city_mapped_or_source as city
+    , match_country
     , event_name
     , event_match_number
     , toss_winner
     , winner
+    , team_1
+    , team_2
+    , nation_type_team_1
+    , nation_type_team_2
   from {{ ref('int_cricket__matches_flattened') }}
 )
 
@@ -47,6 +53,7 @@ select
   , bi.innings_number
   , bi.batter
   , bi.batting_team
+  , if(bi.batting_team = m.team_1, m.nation_type_team_1, m.nation_type_team_2) as batting_team_nation_type
   , bi.runs_scored
   , bi.balls_faced
   , bi.fours
@@ -55,8 +62,10 @@ select
   , m.season
   , m.match_type
   , m.match_start_date
+  , m.venue_id
   , m.venue
   , m.city
+  , m.match_country
   , m.event_name
   , m.event_match_number
   , m.toss_winner

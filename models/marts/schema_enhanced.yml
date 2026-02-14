@@ -13,6 +13,13 @@ models:
       - name: innings_number
         tests:
           - not_null
+      - name: venue_id
+        description: "Persistent venue identifier."
+        tests:
+          - relationships:
+              to: ref('dim_venues')
+              field: venue_id
+              where: "venue_id is not null"
       - name: batter
         tests:
           - not_null

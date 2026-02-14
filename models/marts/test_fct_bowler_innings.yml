@@ -59,7 +59,7 @@ unit_tests:
             match_type: "T20"
             match_start_date: "2023-06-15"
             venue: "Test Stadium"
-            city: "Test City"
+            city_mapped_or_source: "Test City"
             event_name: "Test Series"
             event_match_number: 1
             toss_winner: "Team A"

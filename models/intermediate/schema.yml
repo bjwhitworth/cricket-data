@@ -68,12 +68,39 @@ models:
         description: "Competition stage (e.g., Group, Knockout, Final)."
       - name: event_group
         description: "Competition group, if applicable."
-      - name: city
-        description: "City where the match was played (may be null in source data)."
+      - name: city_from_source
+        description: "City value directly from the source match JSON."
+      - name: city_mapped_or_source
+        description: "Mapped city from venue dimension, falling back to source city."
+      - name: venue_id
+        description: "Persistent venue identifier from venue master mapping."
+        tests:
+          - relationships:
+              to: ref('venue_master_mapping')
+              field: venue_id
+              where: "venue_id is not null"
       - name: venue
-        description: "Venue/ground name."
+        description: "Canonicalized venue name after alias resolution."
         tests:
           - not_null
+      - name: venue_from_source
+        description: "Venue/ground name as provided in the source JSON before alias normalization."
+        tests:
+          - not_null
+      - name: match_country
+        description: "Country resolved from canonical venue mapping."
+      - name: nation_type_team_1
+        description: "Nation classification for team_1 (Full, Associate, or Unknown)."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Full', 'Associate', 'Unknown']
+      - name: nation_type_team_2
+        description: "Nation classification for team_2 (Full, Associate, or Unknown)."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Full', 'Associate', 'Unknown']
       - name: toss_winner
         description: "Team that won the toss."
         tests:
@@ -132,6 +159,36 @@ models:
         description: "Ingestion timestamp from raw JSON stage."
         tests:
           - not_null
+
+  - name: int_cricket__match_venues
+    description: "Resolved match-level venue attributes from source venue/city using seed-driven venue-city-country mapping."
+    columns:
+      - name: match_id
+        description: "Cricket match identifier."
+        tests:
+          - not_null
+          - unique
+      - name: venue_id
+        description: "Persistent venue identifier from venue master mapping."
+        tests:
+          - relationships:
+              to: ref('venue_master_mapping')
+              field: venue_id
+              where: "venue_id is not null"
+      - name: venue
+        description: "Resolved canonical venue name, falling back to source venue if unmapped."
+        tests:
+          - not_null
+      - name: venue_from_source
+        description: "Venue string from source JSON before alias resolution."
+        tests:
+          - not_null
+      - name: city_from_source
+        description: "City string from source JSON."
+      - name: city_mapped_or_source
+        description: "Resolved city from mapping with fallback to source city."
+      - name: match_country
+        description: "Resolved country from venue mapping."
       
   - name: int_cricket__innings_flattened
     description: One row per innings with raw inning struct and context.
