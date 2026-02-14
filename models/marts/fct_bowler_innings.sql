@@ -18,12 +18,13 @@ with deliveries as (
 , matches as (
   select
     match_id
+    , venue_id
     , gender
     , season
     , match_type
     , match_start_date
     , venue
-    , city
+    , city_mapped_or_source as city
     , event_name
     , event_match_number
     , toss_winner
@@ -31,6 +32,9 @@ with deliveries as (
     , participating_teams
     , team_1
     , team_2
+    , match_country
+    , nation_type_team_1
+    , nation_type_team_2
   from {{ ref('int_cricket__matches_flattened') }}
 )
 
@@ -93,8 +97,10 @@ select
   , m.season
   , m.match_type
   , m.match_start_date
+  , m.venue_id
   , m.venue
   , m.city
+  , m.match_country
   , m.event_name
   , m.event_match_number
   , m.toss_winner
@@ -107,6 +113,7 @@ select
   , i.is_super_over                                                                          as innings_is_super_over
   , dense_rank() over (partition by bi.match_id, bi.batting_team order by bi.innings_number) as bowling_innings_rank
   , if(bi.batting_team = m.team_1, m.team_2, m.team_1)                                       as bowling_team
+  , if(bi.batting_team = m.team_1, m.nation_type_team_2, m.nation_type_team_1)               as bowling_team_nation_type
   , round(bi.legal_deliveries / 6.0, 2)                                                      as overs_bowled
   , round(bi.runs_conceded * 1.0 / nullif(bi.wickets, 0), 2)                                 as bowling_average
   , round(bi.runs_conceded * 6.0 / nullif(bi.legal_deliveries, 0), 2)                        as economy_rate

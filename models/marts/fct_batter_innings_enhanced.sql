@@ -92,11 +92,14 @@ select
   , bi.season
   , bi.match_type
   , bi.match_start_date
+  , bi.venue_id
   , bi.venue
   , bi.city
+  , bi.match_country
   , bi.event_name
   , bi.toss_winner
   , bi.winner
+  , bi.batting_team_nation_type
 
   -- Batting position enrichment
   , bp.batting_position

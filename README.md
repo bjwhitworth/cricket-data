@@ -27,6 +27,7 @@ cricket-data/
 ├── scripts/
 │   ├── python/               # Python utility scripts
 │   │   ├── generate_match_narrative.py  # LLM-powered match summaries
+│   │   ├── sync_venue_master_mapping.py # Sync stable venue IDs from curated seeds
 │   │   └── test_gemini_connection.py    # Gemini API connectivity test
 │   └── r/                    # R data analysis scripts
 ├── data/
@@ -152,6 +153,39 @@ Verify Gemini connectivity and quota status:
 ```bash
 python scripts/python/test_gemini_connection.py
 ```
+
+### Sync Venue Master Mapping (stable venue IDs)
+
+Whenever you edit either of these curated seeds:
+- `seeds/venue_country_mapping.csv`
+- `seeds/venue_alias_mapping.csv`
+
+run the master sync utility to propagate changes into `seeds/venue_master_mapping.csv`.
+
+Preview only (recommended first):
+
+```bash
+uv run python scripts/python/sync_venue_master_mapping.py
+```
+
+Apply updates:
+
+```bash
+uv run python scripts/python/sync_venue_master_mapping.py --apply
+```
+
+Then reseed + rebuild venue models:
+
+```bash
+dbt seed --select venue_country_mapping venue_alias_mapping venue_master_mapping
+dbt build --select int_cricket__match_venues+
+```
+
+Behavior guarantees:
+- Existing `venue_id` values are preserved.
+- City/country fixes are propagated into existing master rows when unambiguous.
+- New canonical triples are appended with new `ven_XXXXXX` IDs.
+- Ambiguous venue-name cases are reported and left for manual review.
 
 ## Testing
 

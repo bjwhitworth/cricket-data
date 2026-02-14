@@ -20,6 +20,12 @@ models:
           - not_null
       - name: batting_team
         description: Team the batter was playing for
+      - name: batting_team_nation_type
+        description: Nation classification for batting_team (Full, Associate, or Unknown)
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Full', 'Associate', 'Unknown']
       - name: runs_scored
         description: Total runs scored by the batter in this innings
       - name: balls_faced
@@ -36,6 +42,13 @@ models:
         description: Format (Test, ODI, T20, etc.)
       - name: match_start_date
         description: Date the match started
+      - name: venue_id
+        description: Persistent venue identifier
+        tests:
+          - relationships:
+              to: ref('dim_venues')
+              field: venue_id
+              where: "venue_id is not null"
       - name: venue
         description: Stadium/ground name
       - name: season
@@ -82,6 +95,38 @@ models:
         description: Format (Test, ODI, T20, etc.)
       - name: match_start_date
         description: Date the match started
+      - name: venue_id
+        description: Persistent venue identifier
+        tests:
+          - relationships:
+              to: ref('dim_venues')
+              field: venue_id
+              where: "venue_id is not null"
+      - name: bowling_team_nation_type
+        description: Nation classification for bowling_team (Full, Associate, or Unknown)
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Full', 'Associate', 'Unknown']
+
+  - name: dim_venues
+    description: |
+      Venue dimension with persistent venue IDs and canonical location attributes.
+      One row per venue_id from venue master mapping.
+    columns:
+      - name: venue_id
+        description: Persistent venue identifier
+        tests:
+          - not_null
+          - unique
+      - name: venue_name
+        description: Canonical venue name
+      - name: city
+        description: Canonical venue city
+      - name: country
+        description: Canonical venue country
+      - name: match_count
+        description: Number of matches mapped to this venue ID
 
   - name: dim_players
     description: |
