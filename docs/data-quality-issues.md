@@ -103,3 +103,4 @@ All issues documented here have been incorporated into the dbt schema definition
 - Consider adding tests for configuration retrieval, JSON blob creation, and database storage functionality.
 - Exceptions in `batch_match_descriptions_api.py`: The function should either: (1) maintain a count of failures and report it in the summary (lines 225-226), or (2) raise the exception after cleanup to ensure the user is aware of preparation failures, especially for critical production batches.
 - check union all on batter/partner to ensure correctness
+- create over x delivery index and fix a bunch of partnership start/end stuff

@@ -1,0 +1,354 @@
+{
+    "entries": {
+        "team": "Romania",
+        "overs": {
+            "items": [
+                {
+                    "entries": {
+                        "over": "0",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"Taranjeet Singh\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"Taranjeet Singh\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"Taranjeet Singh\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Fanyan Mughal\",\"extras\":{\"wides\":1},\"non_striker\":\"Taranjeet Singh\",\"runs\":{\"batter\":0,\"extras\":1,\"total\":1}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Fanyan Mughal\",\"extras\":{\"wides\":1},\"non_striker\":\"Taranjeet Singh\",\"runs\":{\"batter\":0,\"extras\":1,\"total\":1}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"Taranjeet Singh\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"Taranjeet Singh\",\"runs\":{\"batter\":4,\"extras\":0,\"total\":4}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"Taranjeet Singh\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "1",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"Taranjeet Singh\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":6,\"extras\":0,\"total\":6}}",
+                                "{\"batter\":\"Taranjeet Singh\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"Taranjeet Singh\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":4,\"extras\":0,\"total\":4}}",
+                                "{\"batter\":\"Taranjeet Singh\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0},\"wickets\":[{\"player_out\":\"Taranjeet Singh\",\"fielders\":[{\"name\":\"C Sudarsanan\"}],\"kind\":\"caught\"}]}",
+                                "{\"batter\":\"V Saini\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}",
+                                "{\"batter\":\"V Saini\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "2",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"V Saini\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"V Saini\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"V Saini\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"V Saini\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"V Saini\",\"bowler\":\"Fanyan Mughal\",\"extras\":{\"wides\":1},\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":1,\"total\":1}}",
+                                "{\"batter\":\"V Saini\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"V Saini\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "3",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"V Saini\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"V Saini\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"V Saini\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"V Saini\",\"runs\":{\"batter\":4,\"extras\":0,\"total\":4}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"V Saini\",\"runs\":{\"batter\":6,\"extras\":0,\"total\":6}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"V Saini\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "4",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"V Saini\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":4,\"extras\":0,\"total\":4}}",
+                                "{\"batter\":\"V Saini\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":4,\"extras\":0,\"total\":4}}",
+                                "{\"batter\":\"V Saini\",\"bowler\":\"Fanyan Mughal\",\"extras\":{\"wides\":1},\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":1,\"total\":1}}",
+                                "{\"batter\":\"V Saini\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"V Saini\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"V Saini\",\"bowler\":\"Fanyan Mughal\",\"extras\":{\"wides\":1},\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":1,\"total\":1}}",
+                                "{\"batter\":\"V Saini\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0},\"wickets\":[{\"player_out\":\"V Saini\",\"fielders\":[{\"name\":\"Aaftab Alam Khan\"}],\"kind\":\"caught\"}]}",
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "5",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"Waqas Ahmad\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Waqas Ahmad\",\"non_striker\":\"S Nadigotla\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"Waqas Ahmad\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}",
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"Waqas Ahmad\",\"extras\":{\"wides\":1},\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":1,\"total\":1}}",
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"Waqas Ahmad\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"Waqas Ahmad\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":4,\"extras\":0,\"total\":4}}",
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"Waqas Ahmad\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "6",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Washeem Abbas\",\"extras\":{\"wides\":1},\"non_striker\":\"S Nadigotla\",\"runs\":{\"batter\":0,\"extras\":1,\"total\":1}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"S Nadigotla\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"S Nadigotla\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"S Nadigotla\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"S Nadigotla\",\"runs\":{\"batter\":4,\"extras\":0,\"total\":4}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "7",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"Waqas Ahmad\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Waqas Ahmad\",\"non_striker\":\"S Nadigotla\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Waqas Ahmad\",\"non_striker\":\"S Nadigotla\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"Waqas Ahmad\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"Waqas Ahmad\",\"non_striker\":\"S Nadigotla\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"Waqas Ahmad\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "8",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"B Arora\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":4,\"extras\":0,\"total\":4}}",
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"B Arora\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"B Arora\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"S Nadigotla\",\"bowler\":\"B Arora\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0},\"wickets\":[{\"player_out\":\"S Nadigotla\",\"fielders\":[{\"name\":\"C Sudarsanan\"}],\"kind\":\"stumped\"}]}",
+                                "{\"batter\":\"S Periyalwar\",\"bowler\":\"B Arora\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"S Periyalwar\",\"bowler\":\"B Arora\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "9",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"S Periyalwar\",\"bowler\":\"E Mathew\",\"extras\":{\"byes\":1},\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":1,\"total\":1}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"E Mathew\",\"non_striker\":\"S Periyalwar\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"S Periyalwar\",\"bowler\":\"E Mathew\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0},\"wickets\":[{\"player_out\":\"S Periyalwar\",\"fielders\":[{\"name\":\"C Sudarsanan\"}],\"kind\":\"caught\"}]}",
+                                "{\"batter\":\"Abdul Shakoor\",\"bowler\":\"E Mathew\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"E Mathew\",\"non_striker\":\"Abdul Shakoor\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"E Mathew\",\"non_striker\":\"Abdul Shakoor\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "10",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"Abdul Shakoor\",\"bowler\":\"B Arora\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"B Arora\",\"non_striker\":\"Abdul Shakoor\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"Abdul Shakoor\",\"bowler\":\"B Arora\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"B Arora\",\"non_striker\":\"Abdul Shakoor\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"Abdul Shakoor\",\"bowler\":\"B Arora\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"Abdul Shakoor\",\"bowler\":\"B Arora\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "11",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"Abdul Shakoor\",\"bowler\":\"E Mathew\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"Abdul Shakoor\",\"bowler\":\"E Mathew\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"Abdul Shakoor\",\"bowler\":\"E Mathew\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"Abdul Shakoor\",\"bowler\":\"E Mathew\",\"extras\":{\"wides\":1},\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":1,\"total\":1}}",
+                                "{\"batter\":\"Abdul Shakoor\",\"bowler\":\"E Mathew\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"Abdul Shakoor\",\"bowler\":\"E Mathew\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0},\"wickets\":[{\"player_out\":\"Abdul Shakoor\",\"fielders\":[{\"name\":\"VP Thamotharam\"}],\"kind\":\"caught\"}]}",
+                                "{\"batter\":\"S Vashisht\",\"bowler\":\"E Mathew\",\"non_striker\":\"R Satheesan\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "12",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"B Arora\",\"non_striker\":\"S Vashisht\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"R Satheesan\",\"bowler\":\"B Arora\",\"non_striker\":\"S Vashisht\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0},\"wickets\":[{\"player_out\":\"R Satheesan\",\"fielders\":[{\"name\":\"DR Patankar\"}],\"kind\":\"caught\"}]}",
+                                "{\"batter\":\"Gaurav Mishra\",\"bowler\":\"B Arora\",\"non_striker\":\"S Vashisht\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"Gaurav Mishra\",\"bowler\":\"B Arora\",\"non_striker\":\"S Vashisht\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}",
+                                "{\"batter\":\"Gaurav Mishra\",\"bowler\":\"B Arora\",\"non_striker\":\"S Vashisht\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"Gaurav Mishra\",\"bowler\":\"B Arora\",\"non_striker\":\"S Vashisht\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "13",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"S Vashisht\",\"bowler\":\"E Mathew\",\"non_striker\":\"Gaurav Mishra\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}",
+                                "{\"batter\":\"S Vashisht\",\"bowler\":\"E Mathew\",\"non_striker\":\"Gaurav Mishra\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"Gaurav Mishra\",\"bowler\":\"E Mathew\",\"non_striker\":\"S Vashisht\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}",
+                                "{\"batter\":\"Gaurav Mishra\",\"bowler\":\"E Mathew\",\"non_striker\":\"S Vashisht\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"S Vashisht\",\"bowler\":\"E Mathew\",\"non_striker\":\"Gaurav Mishra\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}",
+                                "{\"batter\":\"S Vashisht\",\"bowler\":\"E Mathew\",\"non_striker\":\"Gaurav Mishra\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0},\"wickets\":[{\"player_out\":\"S Vashisht\",\"fielders\":[{\"name\":\"Aaftab Alam Khan\"}],\"kind\":\"caught\"}]}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "14",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"Gaurav Mishra\",\"bowler\":\"B Arora\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"B Arora\",\"non_striker\":\"Gaurav Mishra\",\"runs\":{\"batter\":4,\"extras\":0,\"total\":4}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"B Arora\",\"non_striker\":\"Gaurav Mishra\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"B Arora\",\"non_striker\":\"Gaurav Mishra\",\"runs\":{\"batter\":3,\"extras\":0,\"total\":3}}",
+                                "{\"batter\":\"Gaurav Mishra\",\"bowler\":\"B Arora\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"B Arora\",\"non_striker\":\"Gaurav Mishra\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1},\"wickets\":[{\"player_out\":\"Gaurav Mishra\",\"fielders\":[{\"name\":\"Jaswinder Singh\",\"substitute\":true},{\"name\":\"B Arora\"}],\"kind\":\"run out\"}]}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "15",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"Luca Petre\",\"bowler\":\"E Mathew\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"E Mathew\",\"non_striker\":\"Luca Petre\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"E Mathew\",\"non_striker\":\"Luca Petre\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"E Mathew\",\"non_striker\":\"Luca Petre\",\"runs\":{\"batter\":4,\"extras\":0,\"total\":4}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"E Mathew\",\"non_striker\":\"Luca Petre\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"Luca Petre\",\"bowler\":\"E Mathew\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "16",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"M Koli\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"Luca Petre\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"Luca Petre\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"A Bishnoi\",\"extras\":{\"noballs\":1},\"non_striker\":\"Luca Petre\",\"runs\":{\"batter\":0,\"extras\":1,\"total\":1}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"Luca Petre\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"Luca Petre\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"Luca Petre\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"A Bishnoi\",\"non_striker\":\"Luca Petre\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "17",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"M Koli\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"Luca Petre\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"Luca Petre\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"Luca Petre\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"Luca Petre\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"Luca Petre\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}",
+                                "{\"batter\":\"Luca Petre\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "18",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"M Koli\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"Luca Petre\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"Luca Petre\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"Luca Petre\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"Luca Petre\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0},\"wickets\":[{\"player_out\":\"Luca Petre\",\"kind\":\"bowled\"}]}",
+                                "{\"batter\":\"S Thakur\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"S Thakur\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}",
+                                "{\"batter\":\"S Thakur\",\"bowler\":\"Fanyan Mughal\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "entries": {
+                        "over": "19",
+                        "deliveries": {
+                            "items": [
+                                "{\"batter\":\"S Thakur\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":0,\"extras\":0,\"total\":0}}",
+                                "{\"batter\":\"S Thakur\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"S Thakur\",\"runs\":{\"batter\":6,\"extras\":0,\"total\":6}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"S Thakur\",\"runs\":{\"batter\":2,\"extras\":0,\"total\":2}}",
+                                "{\"batter\":\"M Koli\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"S Thakur\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}",
+                                "{\"batter\":\"S Thakur\",\"bowler\":\"Washeem Abbas\",\"non_striker\":\"M Koli\",\"runs\":{\"batter\":1,\"extras\":0,\"total\":1}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "declared": null,
+        "powerplays": {
+            "items": [
+                {
+                    "entries": {
+                        "from": 0.1,
+                        "to": 5.7,
+                        "type": "mandatory"
+                    }
+                }
+            ]
+        },
+        "target": {
+            "entries": {
+                "overs": 20,
+                "runs": "188"
+            }
+        },
+        "miscounted_overs": {
+            "entries": [
+                {
+                    "key": "18",
+                    "value": {
+                        "entries": {
+                            "balls": "\"7\"",
+                            "umpire": null
+                        }
+                    }
+                }
+            ]
+        },
+        "absent_hurt": null,
+        "super_over": null,
+        "penalty_runs": null,
+        "forfeited": null
+    }
+}
