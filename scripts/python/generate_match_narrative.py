@@ -86,7 +86,7 @@ def fetch_match_data(match_id: str) -> dict:
             SELECT 
                 match_id,
                 event_name,
-                city,
+                city_mapped_or_source as city,
                 venue,
                 match_start_date,
                 team_1,
