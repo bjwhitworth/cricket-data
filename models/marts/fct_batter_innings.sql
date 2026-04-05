@@ -23,6 +23,7 @@ with deliveries as (
     , city_mapped_or_source as city
     , match_country
     , event_name
+    , gender
     , event_match_number
     , toss_winner
     , winner
@@ -67,6 +68,7 @@ select
   , m.city
   , m.match_country
   , m.event_name
+  , m.gender
   , m.event_match_number
   , m.toss_winner
   , m.winner

@@ -38,7 +38,6 @@ select
 from read_csv_auto('seeds/venue_country_mapping.csv', header=true)
 group by 1
 order by venue_city_rows desc, country
-limit 25
 ;
 
 -- 3) Rows still incomplete in curated seed (prioritized)
