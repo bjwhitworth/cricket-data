@@ -30,6 +30,7 @@ with match_info as (
     i.match_id
     , i.innings_number
     , i.batting_team
+    , if(i.batting_team = m.team_1, m.team_2, m.team_1)              as bowling_team
     , i.innings_total
     , i.wickets_lost
     , m.match_type
@@ -52,6 +53,7 @@ with match_info as (
     iwp.match_id
     , iwp.innings_number
     , iwp.batting_team
+    , iwp.bowling_team
     , iwp.innings_total
     , iwp.wickets_lost
     , iwp.match_type
@@ -88,6 +90,7 @@ with match_info as (
     iwts.match_id
     , iwts.innings_number
     , iwts.batting_team
+    , iwts.bowling_team
     , iwts.innings_total
     , iwts.wickets_lost
     , iwts.team_innings_number
@@ -165,6 +168,7 @@ select
   iwc.match_id
   , iwc.innings_number
   , iwc.batting_team
+  , iwc.bowling_team 
   , iwc.innings_total
   , iwc.wickets_lost
   , iwc.match_type

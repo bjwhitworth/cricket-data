@@ -15,9 +15,11 @@ with ranked_narratives as (
     , description_type
     , description
     , generated_at
-    , model
+    , model_identifier
+    , model_origin
+    , source
     , loaded_at
-    , ROW_NUMBER() over (partition by match_id, description_type order by generated_at desc) as version_num
+    , ROW_NUMBER() over (partition by match_id, description_type, model_identifier order by generated_at desc) as version_num
   from {{ ref('stg_cricket__narratives') }}
 )
 
@@ -35,7 +37,9 @@ select
   , description_type
   , description
   , generated_at
-  , model
+  , model_identifier
+  , model_origin
+  , source
   , loaded_at
   , version_num
   , is_most_recent
