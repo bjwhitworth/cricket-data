@@ -1,0 +1,4 @@
+- Do not repeat section labels from the input.
+- Do not enumerate all wickets.
+- Be aware of match_type, but do not mention it directly.
+- Keep tone factual and concise.
