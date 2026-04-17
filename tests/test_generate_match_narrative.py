@@ -90,21 +90,21 @@ class TestFormatMatchPrompt:
             ],
             'top_batters': [
                 {
-                    'innings_number': 1,
                     'batter': 'S Smith',
-                    'runs': 120,
-                    'balls_faced': 100,
-                    'fours': 10,
-                    'sixes': 2
+                    'runs_in_match': 120,
+                    'innings_scores': 'Innings 1: 120',
+                    'balls_faced_in_match': 100,
+                    'fours_in_match': 10,
+                    'sixes_in_match': 2
                 }
             ],
             'top_bowlers': [
                 {
-                    'innings_number': 2,
                     'bowler': 'P Cummins',
-                    'balls_bowled': 60,
-                    'runs_conceded': 45,
-                    'wickets': 4
+                    'wickets_in_match': 4,
+                    'runs_conceded_in_match': 45,
+                    'balls_bowled_in_match': 60,
+                    'innings_details': 'Innings 2: 4/45 (10.0 overs)'
                 }
             ],
             'key_wickets': [
@@ -192,7 +192,7 @@ class TestFormatMatchPrompt:
     
     def test_handles_zero_balls_faced(self, sample_match_data):
         """Should handle zero division for strike rate."""
-        sample_match_data['top_batters'][0]['balls_faced'] = 0
+        sample_match_data['top_batters'][0]['balls_faced_in_match'] = 0
         
         prompt = format_match_prompt(sample_match_data)
         
@@ -201,8 +201,14 @@ class TestFormatMatchPrompt:
     def test_prompt_limits_batters(self, sample_match_data):
         """Should limit top batters to 6."""
         sample_match_data['top_batters'] = [
-            {'innings_number': i, 'batter': f'Player{i}', 'runs': 50, 
-             'balls_faced': 40, 'fours': 5, 'sixes': 1}
+            {
+                'batter': f'Player{i}',
+                'runs_in_match': 50,
+                'innings_scores': f'Innings 1: {50 - i}',
+                'balls_faced_in_match': 40,
+                'fours_in_match': 5,
+                'sixes_in_match': 1,
+            }
             for i in range(10)
         ]
         
@@ -215,8 +221,13 @@ class TestFormatMatchPrompt:
     def test_prompt_limits_bowlers(self, sample_match_data):
         """Should limit top bowlers to 6."""
         sample_match_data['top_bowlers'] = [
-            {'innings_number': i, 'bowler': f'Bowler{i}', 'balls_bowled': 60,
-             'runs_conceded': 40, 'wickets': 3}
+            {
+                'bowler': f'Bowler{i}',
+                'wickets_in_match': 3,
+                'runs_conceded_in_match': 40,
+                'balls_bowled_in_match': 60,
+                'innings_details': f'Innings 1: 3/40 (10.0 overs)',
+            }
             for i in range(10)
         ]
         
@@ -227,7 +238,7 @@ class TestFormatMatchPrompt:
         assert bowler_count == 6
     
     def test_prompt_limits_wickets(self, sample_match_data):
-        """Should limit key wickets to 8."""
+        """Should limit key wickets shown to 40."""
         sample_match_data['key_wickets'] = [
             {
                 'innings_number': 1,
@@ -239,14 +250,14 @@ class TestFormatMatchPrompt:
                 'wicket_fielder_1': None,
                 'wicket_fielder_2': None
             }
-            for i in range(12)
+            for i in range(45)
         ]
         
         prompt = format_match_prompt(sample_match_data)
         
         # Count how many players appear in wickets section
-        player_count = sum(1 for i in range(12) if f'Player{i}' in prompt)
-        assert player_count == 8
+        player_count = sum(1 for i in range(45) if f'Player{i}' in prompt)
+        assert player_count == 40
     
     def test_handles_tie_no_result(self, sample_match_data):
         """Should handle matches with no winner."""
@@ -311,7 +322,7 @@ class TestGenerateNarrative:
         mock_response.text = "This is the generated narrative."
         mock_client.models.generate_content.return_value = mock_response
         
-        result = generate_narrative('1234567')
+        result = generate_narrative('1234567', provider='gemini')
         
         assert result == "This is the generated narrative."
         mock_client.models.generate_content.assert_called_once()
@@ -338,7 +349,7 @@ class TestGenerateNarrative:
         
         with patch.dict(os.environ, {}, clear=True):
             with pytest.raises(ValueError, match="GEMINI_API_KEY"):
-                generate_narrative('1234567')
+                generate_narrative('1234567', provider='gemini')
 
 
 if __name__ == '__main__':
