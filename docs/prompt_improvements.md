@@ -1,4 +1,8 @@
-- Add clearer innings flow data, particularly highlighting innings in which the game was won.
-  - E.g. team innings number, batting
-- Add required chase details for limited overs matches and final innings of tests.
-- Proportion of runs scored by a batter or wickets taken -- should correlate with list of top performers.
+- INNINGS FLOW: Add clearer innings flow data, particularly highlighting innings in which the game was won. E.g. team innings number, batting order, key partnerships.
+- TARGET: Add required chase details for limited overs matches and final innings of tests.
+- BATTING RUNS %: Proportion of runs scored by a batter or wickets taken -- should correlate with list of top performers.
+- SERIES CONTEXT: Add series and tournament information to match data.
+- KEY WICKETS: Perhaps full scorecard, but add runs and cumulative runs at time of wicket.
+- BATTING SCORES: Add context on score, conditional on location, event, and match type. 
+- PLAYER IMPACT: Some measure of impact in the game. 
+- GAME BALANCE: Some measure of balance in the game, at each point.
