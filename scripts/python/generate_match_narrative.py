@@ -307,7 +307,12 @@ def _generate_with_local_model(prompt: str, config: DescriptionConfig, model: st
     model_obj = AutoModelForCausalLM.from_pretrained(model, torch_dtype='auto')
     _local_log(f"Model weights loaded in {time.perf_counter() - model_load_start:.2f}s")
 
-    device = 'mps' if torch.backends.mps.is_available() else 'cpu'
+    if torch.cuda.is_available():
+        device = 'cuda'
+    elif torch.backends.mps.is_available():
+        device = 'mps'
+    else:
+        device = 'cpu'
     _local_log(f"Selecting execution device: {device}")
     model_obj = model_obj.to(device)
 
