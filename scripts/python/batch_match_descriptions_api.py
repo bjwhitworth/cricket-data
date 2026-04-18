@@ -459,7 +459,12 @@ def store_batch_results(input_file: str, desc_type: str,
                         continue
                     
                     # Create and store JSON blob
-                    narrative_json = create_narrative_json_blob(match_id, desc_type, description, source='batch_api')
+                    narrative_json = create_narrative_json_blob(
+                        match_id,
+                        desc_type,
+                        description,
+                        source='batch_api',
+                    )
                     store_narrative_json(narrative_json, db_path)
                     
                     success_count += 1

@@ -3,6 +3,10 @@ version: 2
 models:
   - name: stg_cricket__narratives
     description: "Parsed and validated match narratives from raw JSON. Staging layer for dbt transformation."
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "trim(model_identifier) <> ''"
+          where: "model_identifier is not null"
     columns:
       - name: raw_narrative_id
         description: "Unique identifier for this raw narrative record."
@@ -27,8 +31,22 @@ models:
         description: "Timestamp when narrative was generated."
         tests:
           - not_null
-      - name: model
-        description: "Gemini model used for generation."
+      - name: model_identifier
+        description: "Model identifier used for generation (for example gemini-2.5-flash-lite or google/gemma-4-E2B-it)."
+        tests:
+          - not_null
+      - name: model_origin
+        description: "Execution origin for generation: local model runtime or remote API service."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['local', 'api']
+      - name: source
+        description: "Pipeline source label from the writer script (for example cli, cli_local, batch, batch_api)."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['cli', 'cli_local', 'batch', 'batch_api']
       - name: loaded_at
         description: "Timestamp when record was inserted into raw table."
         tests:

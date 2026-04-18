@@ -48,8 +48,21 @@ def process_match_with_storage(match_id: str, desc_type: str = 'brief', api_key:
         Tuple of (match_id, success, error_message or None)
     """
     try:
-        description = generate_narrative(match_id, desc_type=desc_type, api_key=api_key)
-        narrative_json = create_narrative_json_blob(match_id, desc_type, description, source='batch')
+        description, model_used = generate_narrative(
+            match_id,
+            desc_type=desc_type,
+            provider='gemini',
+            api_key=api_key,
+            return_model=True,
+        )
+        narrative_json = create_narrative_json_blob(
+            match_id,
+            desc_type,
+            description,
+            source='batch',
+            model=model_used,
+            model_origin='api',
+        )
         store_narrative_json(narrative_json, db_path or DB_PATH)
         
         return (match_id, True, None)
