@@ -464,8 +464,6 @@ def store_batch_results(input_file: str, desc_type: str,
                         desc_type,
                         description,
                         source='batch_api',
-                        model='gemini-2.5-flash-lite',
-                        model_origin='api',
                     )
                     store_narrative_json(narrative_json, db_path)
                     
