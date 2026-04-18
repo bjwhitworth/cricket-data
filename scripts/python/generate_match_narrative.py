@@ -347,9 +347,8 @@ def _generate_with_local_model(prompt: str, config: DescriptionConfig, model: st
         f"(prompt_tokens={prompt_tokens})"
     )
 
-    local_max_new_tokens = min(config.max_tokens, 120 if config.type == 'brief' else 320)
     generation_kwargs = {
-        'max_new_tokens': local_max_new_tokens,
+        'max_new_tokens': config.max_tokens,
         'do_sample': config.temperature > 0,
         'temperature': max(min(config.temperature, 0.4), 0.1),
         'repetition_penalty': 1.08,
