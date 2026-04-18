@@ -1,4 +1,4 @@
-- CHASES | All cricket matches involve a chase in the final innings, when the batting team tries to reach the target set by the opposing team.
+- CHASES | Many cricket matches involve a chase in the final innings, when the batting team tries to reach the target set by the opposing team. If no target-setting final innings chase exists, such as in an innings victory or a draw, do not describe the match as a chase.
   - Do not mention that both teams scored similarly if they did. This can happen because of a successful chase.
 - BATTING SCORES | For batting teams and batters, look for the relatively higher scores as moments that contributed to the match. Look for the innings in which this happened, and the players who contributed in that innings.
 - BOWLING SCORES | For bowling teams and bowlers, look for the higher wickets taken and lower runs conceded. Look for the innings in which this happened, and the players who contributed in that innings.
