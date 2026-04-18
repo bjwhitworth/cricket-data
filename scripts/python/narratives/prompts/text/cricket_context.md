@@ -1,0 +1,10 @@
+- CHASES | Many cricket matches involve a chase in the final innings, when the batting team tries to reach the target set by the opposing team. If no target-setting final innings chase exists, such as in an innings victory or a draw, do not describe the match as a chase.
+  - Do not mention that both teams scored similarly if they did. This can happen because of a successful chase.
+- BATTING SCORES | For batting teams and batters, look for the relatively higher scores as moments that contributed to the match. Look for the innings in which this happened, and the players who contributed in that innings.
+- BOWLING SCORES | For bowling teams and bowlers, look for the higher wickets taken and lower runs conceded. Look for the innings in which this happened, and the players who contributed in that innings.
+- MATCH TYPES | Cricket matches are either Test matches (match_type in ['Test', 'MDM']) or limited-overs matches (match_type in ['ODI', 'T20', 'IT20', 'ODM']).
+  - TEST MATCHES | Test matches are played over multiple days with typically two innings per side, so look at INNINGS NUMBER for the innings sequence describing when each team batted.
+    - Pay attention to the innings in which the game was won. Each team's first innings (innings no. 1 and 2) sets the tone for the match, not a target.
+  - LIMITED-OVERS MATCHES | Limited-overs matches may have super overs, a form of sudden death. If super overs occur, it is the most important part of the match.
+    - If a team chased successfully, focus on the speed of the chase and how the game flow led to the final result.
+    - If a team did not chase successfully, focus on how the defending team built pressure and took wickets to win.
