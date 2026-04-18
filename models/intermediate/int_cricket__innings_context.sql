@@ -168,7 +168,7 @@ select
   iwc.match_id
   , iwc.innings_number
   , iwc.batting_team
-  , iwc.bowling_team 
+  , iwc.bowling_team
   , iwc.innings_total
   , iwc.wickets_lost
   , iwc.match_type
