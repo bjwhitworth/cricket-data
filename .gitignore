@@ -48,9 +48,9 @@ Desktop.ini
 analyses/ideas.md
 analyses/*.R
 analyses/*.py
+analyses/*.sql
 
 # API batching
 batches/metadata/*
 batches/results/*
 batches/requests/*.jsonl
-
