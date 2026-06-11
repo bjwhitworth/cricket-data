@@ -19,7 +19,7 @@ from narratives.prompts import format_match_prompt as _format_match_prompt_impl
 # Configuration
 DB_PATH = os.getenv('CRICKET_DB_PATH', 'data/duckdb/dev.duckdb')
 DEFAULT_GEMINI_MODEL = os.getenv('GEMINI_MODEL', 'gemini-3.1-flash-lite')
-DEFAULT_LOCAL_MODEL = os.getenv('LOCAL_NARRATIVE_MODEL', 'google/gemma-4-E2B-it')
+DEFAULT_LOCAL_MODEL = os.getenv('LOCAL_NARRATIVE_MODEL', 'google/gemma-4-E4B-it')
 
 
 def _local_log(message: str) -> None:
