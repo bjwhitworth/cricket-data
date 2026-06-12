@@ -24,13 +24,13 @@ from generate_match_narrative import (
     generate_narrative, 
     DescriptionConfig,
     create_narrative_json_blob,
-    store_narrative_json
+    store_narrative_json,
+    DEFAULT_LOCAL_MODEL,
+    DEFAULT_GEMINI_MODEL,
+    DB_PATH,
 )
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
-
-# Configuration
-DB_PATH = os.getenv('CRICKET_DB_PATH', 'data/duckdb/dev.duckdb')
 
 
 def get_all_match_ids() -> list[str]:
@@ -40,7 +40,12 @@ def get_all_match_ids() -> list[str]:
         return [row[0] for row in cursor.fetchall()]
 
 
-def process_match_with_storage(match_id: str, desc_type: str = 'brief', api_key: str = None, 
+def process_match_with_storage(match_id: str, 
+                               provider: str = 'local',
+                               model: str = DEFAULT_LOCAL_MODEL,
+                               model_origin: str = 'local',
+                               desc_type: str = 'brief', 
+                               api_key: str = None, 
                                db_path: str = None) -> tuple[str, bool, str | None]:
     """Process a single match and store result as raw JSON.
     
@@ -51,7 +56,8 @@ def process_match_with_storage(match_id: str, desc_type: str = 'brief', api_key:
         description, model_used = generate_narrative(
             match_id,
             desc_type=desc_type,
-            provider='gemini',
+            provider=provider,
+            model=model,
             api_key=api_key,
             return_model=True,
         )
@@ -61,7 +67,7 @@ def process_match_with_storage(match_id: str, desc_type: str = 'brief', api_key:
             description,
             source='batch',
             model=model_used,
-            model_origin='api',
+            model_origin=model_origin,
         )
         store_narrative_json(narrative_json, db_path or DB_PATH) # TODO: this might break with concurrent writes, consider batching inserts or using a queue system for large scale
         
@@ -70,13 +76,19 @@ def process_match_with_storage(match_id: str, desc_type: str = 'brief', api_key:
         return (match_id, False, str(e))
 
 
-def batch_generate_and_store(desc_type: str = 'brief', workers: int = 4, limit: int = None) -> None:
+def batch_generate_and_store(desc_type: str = 'brief', 
+                             workers: int = 4, 
+                             limit: int = 10, 
+                             model: str = DEFAULT_LOCAL_MODEL, 
+                             model_origin: str = 'local') -> None:
     """Generate descriptions for all matches and store as raw JSON.
     
     Args:
         desc_type: Type of description ('brief' or 'full')
         workers: Number of concurrent worker threads
         limit: Optional limit on number of matches to process
+        model: Model to use for generating narratives
+        model_origin: Origin of the model ('local' or 'api')
     """
     api_key = os.getenv('GEMINI_API_KEY')
     if not api_key:
@@ -111,7 +123,7 @@ def batch_generate_and_store(desc_type: str = 'brief', workers: int = 4, limit: 
     with ThreadPoolExecutor(max_workers=workers) as executor:
         # Submit all tasks
         futures = {
-            executor.submit(process_match_with_storage, match_id, desc_type, api_key): match_id 
+            executor.submit(process_match_with_storage, match_id=match_id, desc_type=desc_type, api_key=api_key, model=model, model_origin=model_origin): match_id 
             for match_id in match_ids
         }
         
@@ -160,10 +172,12 @@ def batch_generate_and_store(desc_type: str = 'brief', workers: int = 4, limit: 
 
 
 if __name__ == "__main__":
-    # Parse arguments
+    # Parse arguments -- restrict size and four workers
     desc_type = 'brief'
     workers = 4
-    limit = None
+    limit = 10
+    model = DEFAULT_LOCAL_MODEL
+    model_origin = 'local'
     
     for arg in sys.argv[1:]:
         if arg.startswith('--type='):
@@ -172,15 +186,18 @@ if __name__ == "__main__":
             workers = int(arg.split('=')[1])
         elif arg.startswith('--limit='):
             limit = int(arg.split('=')[1])
-        elif arg.startswith('--model='): # TODO: add this option to pass through to generate_narrative
-            print("Warning: --model option is not implemented yet, ignoring")            
-    
+        elif arg.startswith('--model='):
+            model = arg.split('=')[1]            
+        elif arg.startswith('--provider='):
+            provider = arg.split('=')[1]
+            model_origin = 'local' if provider == 'local' else 'api'
+
     if desc_type not in ('brief', 'full'):
         print(f"Error: --type must be 'brief' or 'full', got '{desc_type}'")
         sys.exit(1)
     
     try:
-        batch_generate_and_store(desc_type=desc_type, workers=workers, limit=limit)
+        batch_generate_and_store(desc_type=desc_type, workers=workers, limit=limit, model=model, model_origin=model_origin)
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
