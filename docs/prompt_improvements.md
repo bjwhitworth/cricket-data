@@ -1,4 +1,5 @@
 - INNINGS FLOW: Add clearer innings flow data, particularly highlighting innings in which the game was won. E.g. team innings number, batting order, key partnerships.
+- SCORECARD: Is it better to add a scorecard explicitly?
 - TARGET: Add required chase details for limited overs matches and final innings of tests.
 - BATTING RUNS %: Proportion of runs scored by a batter or wickets taken -- should correlate with list of top performers.
 - SERIES CONTEXT: Add series and tournament information to match data.

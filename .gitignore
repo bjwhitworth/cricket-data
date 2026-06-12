@@ -2,6 +2,9 @@
 data/raw/**/*
 data/scratch/
 
+# Docs
+docs/laaj.md
+
 # Compiled SQL and artifacts
 target/
 dbt_packages/

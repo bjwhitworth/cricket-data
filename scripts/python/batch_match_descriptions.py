@@ -63,7 +63,7 @@ def process_match_with_storage(match_id: str, desc_type: str = 'brief', api_key:
             model=model_used,
             model_origin='api',
         )
-        store_narrative_json(narrative_json, db_path or DB_PATH)
+        store_narrative_json(narrative_json, db_path or DB_PATH) # TODO: this might break with concurrent writes, consider batching inserts or using a queue system for large scale
         
         return (match_id, True, None)
     except Exception as e:
@@ -92,6 +92,7 @@ def batch_generate_and_store(desc_type: str = 'brief', workers: int = 4, limit: 
             )
         """)
     
+    # Fetch match IDs
     match_ids = get_all_match_ids()
     if limit:
         match_ids = match_ids[:limit]
@@ -100,6 +101,7 @@ def batch_generate_and_store(desc_type: str = 'brief', workers: int = 4, limit: 
     print(f"Generating {desc_type} descriptions for {total} matches ({workers} workers)...")
     print(f"Results will be stored in match_narratives table\n")
     
+    # Process matches with threading
     start_time = datetime.now()
     processed = 0
     succeeded = 0
@@ -170,6 +172,8 @@ if __name__ == "__main__":
             workers = int(arg.split('=')[1])
         elif arg.startswith('--limit='):
             limit = int(arg.split('=')[1])
+        elif arg.startswith('--model='): # TODO: add this option to pass through to generate_narrative
+            print("Warning: --model option is not implemented yet, ignoring")            
     
     if desc_type not in ('brief', 'full'):
         print(f"Error: --type must be 'brief' or 'full', got '{desc_type}'")
