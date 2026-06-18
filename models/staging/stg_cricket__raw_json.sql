@@ -1,11 +1,15 @@
 {{ config(
-    materialized='table',
+    materialized='incremental',
+    unique_key='match_id',
+    incremental_strategy='append',
     tags=['stage', 'raw'],
     pre_hook=[
         "SET preserve_insertion_order = false",
         "SET threads = 8"
     ]
-) }}
+) 
+}}
+
 
 with raw_json as (
   select
@@ -34,5 +38,13 @@ select
   , try_cast(meta as json)    as meta_json
   , try_cast(info as json)    as info_json
   , try_cast(innings as json) as innings_json
-  , now()                     as ingested_at
+  , now()                     as ingested_at_utc
 from raw_json
+
+{% if is_incremental() %}
+-- Only scan for IDs that do not exist in the current table
+  where match_id not in (
+    select match_id from {{ this }}
+    where match_id is not null
+  )
+{% endif %}
