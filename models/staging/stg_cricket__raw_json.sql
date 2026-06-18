@@ -43,5 +43,8 @@ from raw_json
 
 {% if is_incremental() %}
 -- Only scan for IDs that do not exist in the current table
-WHERE match_id NOT IN (SELECT match_id FROM {{ this }} WHERE match_id IS NOT NULL)
+  where match_id not in (
+    select match_id from {{ this }}
+    where match_id is not null
+  )
 {% endif %}
