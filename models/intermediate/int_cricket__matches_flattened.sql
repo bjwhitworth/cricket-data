@@ -8,7 +8,7 @@ with base as (
     , info_json
     , meta
     , info
-    , ingested_at
+    , ingested_at_utc
     , try_cast(info.event as struct(name varchar, match_number integer, stage varchar, "group" varchar))
       as event_struct
     , try_cast(info.officials as struct(umpires varchar [], match_referees varchar [], tv_umpires varchar []))
@@ -91,7 +91,7 @@ select
     as players_by_team
   , info.registry.people
     as player_registry
-  , base.ingested_at
+  , base.ingested_at_utc
   , replace(info.season::varchar, '"', '')                                                             as season
   , coalesce(sor.super_over_rounds, 0)
     as super_over_rounds

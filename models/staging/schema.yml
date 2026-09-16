@@ -69,7 +69,7 @@ models:
         tests:
           - not_null
           - unique
-      - name: ingested_at
+      - name: ingested_at_utc
         description: "Timestamp recorded when dbt parsed the JSON payload."
         tests:
           - not_null
@@ -174,7 +174,7 @@ models:
         description: "Mapping of team to player list (struct)."
       - name: player_registry
         description: "Registry mapping of player IDs to names."
-      - name: ingested_at
+      - name: ingested_at_utc
         description: "Ingestion timestamp from raw JSON stage."
         tests:
           - not_null
@@ -253,7 +253,7 @@ models:
         description: "Bowler for the delivery."
         tests:
           - not_null
-      - name: ingested_at
+      - name: ingested_at_utc
         description: "Ingestion timestamp from raw JSON stage."
         tests:
           - not_null

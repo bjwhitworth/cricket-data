@@ -6,14 +6,14 @@ with innings as (
     , innings_number
     , inning_struct
     , batting_team
-    , ingested_at
+    , ingested_at_utc
     , miscounted_overs
   from {{ ref('int_cricket__innings_flattened') }}
 )
 
 select
   innings.match_id
-  , innings.ingested_at
+  , innings.ingested_at_utc
   , innings.innings_number
   , innings.batting_team
   , o.over_idx - 1 as over_idx  -- Convert from 1-based ordinality to 0-based over number

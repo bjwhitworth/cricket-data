@@ -3,7 +3,7 @@
 with expanded_innings as (
   select
     match_id
-    , ingested_at
+    , ingested_at_utc
     , innings_number
     , inning_struct
     , is_super_over
@@ -34,7 +34,7 @@ select
   , ei.innings_number
   , ei.inning_struct.team                       as batting_team
   , ei.is_super_over
-  , ei.ingested_at
+  , ei.ingested_at_utc
   , try_cast(os.recorded_over_count as integer) as recorded_over_count
   , try_cast(ds.runs_total as integer)          as runs_total
   , try_cast(ds.runs_extras as integer)         as runs_extras

@@ -12,7 +12,7 @@ select
   , d.wicket_kind
   , d.wicket_fielder_1
   , d.wicket_fielder_2
-  , d.ingested_at
+  , d.ingested_at_utc
   , d.runs_batter
   , d.runs_extras
   , d.runs_total

@@ -3,7 +3,7 @@
 with overs as (
   select
     match_id
-    , ingested_at
+    , ingested_at_utc
     , innings_number
     , batting_team
     , over_idx
@@ -15,7 +15,7 @@ with overs as (
 , deliveries_with_wickets as (
   select
     overs.match_id
-    , overs.ingested_at
+    , overs.ingested_at_utc
     , overs.innings_number
     , overs.batting_team
     , overs.is_miscounted_over_from_data
